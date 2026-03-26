@@ -41,8 +41,7 @@ Sorting is important because it:
 
 ## Classification of Sorting Algorithms
 
-### Exam Diagram Note
-In the following notes, diagrams are drawn in **array-box form** so you can copy them directly in examinations. For swap-based algorithms, the diagrams show the exact elements compared and the swap arrows; for divide-and-conquer and non-comparison methods, the diagrams show data movement step by step.
+
 
 ### 1. Comparison-Based Sorting
 These algorithms compare elements to decide order.
