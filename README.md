@@ -1,4 +1,4 @@
-# Complete Sorting Notes in Data Structures
+# Data Structures using C
 
 ## Contents
 1. [Introduction to Sorting](#introduction-to-sorting)
@@ -41,6 +41,9 @@ Sorting is important because it:
 
 ## Classification of Sorting Algorithms
 
+### Exam Diagram Note
+In the following notes, diagrams are drawn in **array-box form** so you can copy them directly in examinations. For swap-based algorithms, the diagrams show the exact elements compared and the swap arrows; for divide-and-conquer and non-comparison methods, the diagrams show data movement step by step.
+
 ### 1. Comparison-Based Sorting
 These algorithms compare elements to decide order.
 - Bubble Sort
@@ -77,16 +80,56 @@ It is simple to understand, but inefficient for large data sets.
 ## Diagram
 
 ```text
-Initial:  [5] [1] [4] [2] [8]
+Example array: 29, 10, 14, 37, 13
 
-Pass 1:
-[5] [1] -> swap -> [1] [5]
-[5] [4] -> swap -> [4] [5]
-[5] [2] -> swap -> [2] [5]
-[5] [8] -> no swap
+Index :   0     1     2     3     4
+Start : [29]  [10]  [14]  [37]  [13]
 
-After Pass 1: [1] [4] [2] [5] [8]
-After Pass 2: [1] [2] [4] [5] [8]
+Pass 1
+Compare a[0] and a[1]
+         [29]  [10]
+           ^----swap----^
+Result: [10]  [29]  [14]  [37]  [13]
+
+Compare a[1] and a[2]
+         [29]  [14]
+           ^----swap----^
+Result: [10]  [14]  [29]  [37]  [13]
+
+Compare a[2] and a[3]
+         [29]  [37]
+         no swap
+Result: [10]  [14]  [29]  [37]  [13]
+
+Compare a[3] and a[4]
+         [37]  [13]
+           ^----swap----^
+Result: [10]  [14]  [29]  [13]  [37]
+                                     ↑
+                           largest fixed after pass 1
+
+Pass 2
+Start : [10]  [14]  [29]  [13]  [37]
+Compare a[0] and a[1] -> no swap
+Compare a[1] and a[2] -> no swap
+Compare a[2] and a[3]
+                     [29]  [13]
+                       ^----swap----^
+Result: [10]  [14]  [13]  [29]  [37]
+                               ↑     ↑
+                    last two positions fixed
+
+Pass 3
+Start : [10]  [14]  [13]  [29]  [37]
+Compare a[0] and a[1] -> no swap
+Compare a[1] and a[2]
+               [14]  [13]
+                 ^----swap----^
+Result: [10]  [13]  [14]  [29]  [37]
+
+Sorted array:
+Index :   0     1     2     3     4
+        [10]  [13]  [14]  [29]  [37]
 ```
 
 ## Example with Explanation
@@ -189,15 +232,52 @@ It performs fewer swaps than Bubble Sort, but still takes quadratic time.
 ## Diagram
 
 ```text
-Array: [29] [10] [14] [37] [13]
+Example array: 29, 10, 14, 37, 13
 
-Pass 1: smallest = 10
-Swap 29 and 10
-        [10] [29] [14] [37] [13]
+Index :   0     1     2     3     4
+Start : [29]  [10]  [14]  [37]  [13]
 
-Pass 2: smallest in remaining = 13
-Swap 29 and 13
-        [10] [13] [14] [37] [29]
+Pass 1: find minimum from index 0 to 4
+        [29]  [10]  [14]  [37]  [13]
+          ↑                 ↑      ↑
+      current min         compare compare
+New minimum = 10 at index 1
+
+Swap first unsorted element with minimum
+        [29]  [10]
+          ^----swap----^
+Result: [10]  [29]  [14]  [37]  [13]
+         ---- sorted ----
+
+Pass 2: find minimum from index 1 to 4
+        [10] | [29]  [14]  [37]  [13]
+                ↑                  ↑
+           current min         smallest found
+New minimum = 13 at index 4
+
+Swap a[1] and a[4]
+              [29]                    [13]
+                ^----------------------^
+Result: [10]  [13]  [14]  [37]  [29]
+         -------- sorted --------
+
+Pass 3: find minimum from index 2 to 4
+        [10]  [13] | [14]  [37]  [29]
+                     ↑
+                minimum already correct
+No swap needed
+
+Pass 4: find minimum from index 3 to 4
+        [10]  [13]  [14] | [37]  [29]
+                              ^     ^
+                           compare values
+Swap a[3] and a[4]
+                         [37]  [29]
+                           ^----swap----^
+Result: [10]  [13]  [14]  [29]  [37]
+
+Sorted array:
+        [10]  [13]  [14]  [29]  [37]
 ```
 
 ## Example with Explanation
@@ -293,17 +373,44 @@ It works very well for small or nearly sorted arrays.
 ## Diagram
 
 ```text
-Array: [29] [10] [14] [37] [13]
+Example array: 29, 10, 14, 37, 13
 
-Step 1:
-Sorted:   [29]
-Unsorted: [10] [14] [37] [13]
+Index :   0     1     2     3     4
+Start : [29]  [10]  [14]  [37]  [13]
 
-Insert 10 before 29:
-[10] [29] [14] [37] [13]
+Step 1: insert key = 10 into sorted part [29]
+Sorted part   : [29]
+Key           : [10]
+Shift 29 to right
+               [29] ----> position 1
+Array becomes : [29]  [29]  [14]  [37]  [13]
+Insert key 10 at position 0
+Result        : [10]  [29]  [14]  [37]  [13]
 
-Insert 14 between 10 and 29:
-[10] [14] [29] [37] [13]
+Step 2: insert key = 14 into sorted part [10, 29]
+Compare 14 with 29 -> shift 29 right
+                      [29] ----> position 2
+Array becomes : [10]  [29]  [29]  [37]  [13]
+Compare 14 with 10 -> stop
+Insert 14 at position 1
+Result        : [10]  [14]  [29]  [37]  [13]
+
+Step 3: insert key = 37
+Compare with 29 -> no shift needed
+Result        : [10]  [14]  [29]  [37]  [13]
+
+Step 4: insert key = 13
+Compare 13 with 37 -> shift right
+                      [37] ----> position 4
+Compare 13 with 29 -> shift right
+               [29] ----> position 3
+Compare 13 with 14 -> shift right
+        [14] ----> position 2
+Insert 13 after 10
+Result        : [10]  [13]  [14]  [29]  [37]
+
+Sorted array:
+        [10]  [13]  [14]  [29]  [37]
 ```
 
 ## Example with Explanation
@@ -404,20 +511,42 @@ It is efficient and stable, especially for large data sets.
 ## Diagram
 
 ```text
-Array: [29, 10, 14, 37, 13]
+Example array: 29, 10, 14, 37, 13
 
-            [29, 10, 14, 37, 13]
-              /               \
-        [29, 10, 14]         [37, 13]
-          /      \             /    \
-      [29]    [10, 14]      [37]   [13]
-               /   \
-            [10]  [14]
+Divide phase
+Level 0:              [29] [10] [14] [37] [13]
+                         /                 \
+Level 1:      [29] [10] [14]             [37] [13]
+                  /       \                 /    \
+Level 2:       [29]    [10] [14]        [37]   [13]
+                         /   \
+Level 3:              [10]  [14]
 
-Merge back:
-[10, 14] + [29]      -> [10, 14, 29]
-[13] + [37]          -> [13, 37]
-[10, 14, 29] + [13, 37] -> [10, 13, 14, 29, 37]
+Merge phase
+[10] + [14]  ----merge---->  [10] [14]
+[29] + [10] [14]
+   compare 29 and 10 -> take 10
+   compare 29 and 14 -> take 14
+   copy remaining 29
+Result:                  [10] [14] [29]
+
+[37] + [13]
+   compare 37 and 13 -> take 13
+   copy remaining 37
+Result:                  [13] [37]
+
+Final merge
+Left  : [10] [14] [29]
+Right : [13] [37]
+
+take 10  ---> [10]
+take 13  ---> [10] [13]
+take 14  ---> [10] [13] [14]
+take 29  ---> [10] [13] [14] [29]
+take 37  ---> [10] [13] [14] [29] [37]
+
+Sorted array:
+              [10] [13] [14] [29] [37]
 ```
 
 ## Example with Explanation
@@ -546,26 +675,56 @@ It is very fast in practice, but its worst case is quadratic when partitions are
 ## Diagram
 
 ```text
-Array: [29, 10, 14, 37, 13]
-Pivot = 13
+Example array: 29, 10, 14, 37, 13
+Use last element as pivot.
 
-Partition:
-Smaller than 13 -> [10]
-Pivot           -> [13]
-Greater         -> [29, 14, 37]
+Step 1: partition with pivot = 13
+Index :   0     1     2     3     4
+Array : [29]  [10]  [14]  [37]  [13]
+Pivot :                               ^
+                                      13
 
-Now sort [29, 14, 37]
-Pivot = 37
-Smaller -> [29, 14]
-Pivot   -> [37]
+Scan from left:
+29 > 13  -> keep on right side
+10 < 13  -> move to left partition
+14 > 13  -> keep on right side
+37 > 13  -> keep on right side
 
-Sort [29, 14]
-Pivot = 14
-Smaller -> []
-Pivot   -> [14]
-Greater -> [29]
+Swap pivot into correct position
+        [29]                    [13]
+          ^----------------------^
+After partition:
+        [10]  [13]  [14]  [37]  [29]
+         left   ↑     right part
+              pivot fixed
 
-Final: [10, 13, 14, 29, 37]
+Step 2: sort right part [14, 37, 29]
+Pivot = 29
+
+        [14]  [37]  [29]
+                 ^----swap----^
+After partition:
+        [14]  [29]  [37]
+          left   ↑    right
+               pivot fixed
+
+Step 3: sort left small parts
+[10] is already sorted
+[14] and [37] are single elements
+
+Recursion view
+                    [29, 10, 14, 37, 13]
+                              |
+                          pivot = 13
+                              |
+                 [10]   [13]   [14, 37, 29]
+                                      |
+                                  pivot = 29
+                                      |
+                              [14]   [29]   [37]
+
+Sorted array:
+        [10]  [13]  [14]  [29]  [37]
 ```
 
 ## Example with Explanation
@@ -675,18 +834,49 @@ It is efficient and does not need extra array memory like Merge Sort.
 ## Diagram
 
 ```text
-Array: [4, 10, 3, 5, 1]
+Example array: 29, 10, 14, 37, 13
 
-As Max Heap:
+Step 1: build max heap from array
+Array form : [29] [10] [14] [37] [13]
 
-        10
-       /  \
-      5    3
-     / \
-    4   1
+Tree form:
+                 [37]
+                /    \
+             [29]    [14]
+             /  \
+          [10]  [13]
 
-Remove 10 -> place at end
-Remaining heap rebuilt
+Corresponding array after heapify:
+Index :   0     1     2     3     4
+Heap  : [37]  [29]  [14]  [10]  [13]
+
+Step 2: move root to end
+        [37]                                      [13]
+          ^----------------------------------------^
+Swap root with last element
+Array : [13]  [29]  [14]  [10] | [37]
+Heap part ----------------------   sorted part
+
+Heapify first 4 elements
+        [13]  [29]
+          ^----swap----^
+Result: [29]  [13]  [14]  [10] | [37]
+
+Step 3: move root to end again
+        [29]                             [10]
+          ^-------------------------------^
+Array : [10]  [13]  [14] | [29]  [37]
+
+Heapify first 3 elements
+        [10]        [14]
+          ^----------^
+Result: [14]  [13]  [10] | [29]  [37]
+
+Continue same process
+[14] swapped to correct place, then [13]
+
+Final sorted array:
+        [10]  [13]  [14]  [29]  [37]
 ```
 
 ## Example with Explanation
@@ -805,21 +995,48 @@ This reduces the number of shifts needed.
 ## Diagram
 
 ```text
-Array: [29, 10, 14, 37, 13]
+Example array: 29, 10, 14, 37, 13
+n = 5, so first gap = 2
+
+Initial array
+Index :   0     1     2     3     4
+        [29]  [10]  [14]  [37]  [13]
 
 Gap = 2
-Groups:
-(29, 14, 13)
-(10, 37)
+Compare elements 2 positions apart.
 
-Sort each gap-based group:
-(14, 13, 29)
-(10, 37)
+Group 1: index 0, 2, 4
+         [29]  [14]  [13]
+           |     |     |
+Sort this group by insertion-style shifting
+29 ----> right
+Result group: [13] [14] [29]
 
-Array becomes closer to sorted.
+Group 2: index 1, 3
+         [10]  [37]
+already in order
+
+Array after gap = 2 pass
+Index :   0     1     2     3     4
+        [13]  [10]  [29]  [37]  [14]
 
 Gap = 1
-Now perform normal insertion sort.
+Now perform normal insertion sort
+
+Insert 10 before 13
+        [13]  [10]
+          ^----swap/shift----^
+Array : [10]  [13]  [29]  [37]  [14]
+
+Insert 29 -> no change
+Insert 37 -> no change
+Insert 14
+               [37] ----> right
+        [29] ----> right
+Array : [10]  [13]  [14]  [29]  [37]
+
+Sorted array:
+        [10]  [13]  [14]  [29]  [37]
 ```
 
 ## Example with Explanation
@@ -909,13 +1126,32 @@ It works only when the range of input values is not too large.
 ## Diagram
 
 ```text
-Input: [4, 2, 2, 8, 3, 3, 1]
+Example array: 4, 2, 2, 8, 3, 3, 1
 
-Count array index: 0 1 2 3 4 5 6 7 8
-Count values:      0 1 2 2 1 0 0 0 1
+Input array
+Index :   0    1    2    3    4    5    6
+       [4]  [2]  [2]  [8]  [3]  [3]  [1]
 
-Sorted output:
-[1, 2, 2, 3, 3, 4, 8]
+Step 1: frequency count
+Value :   0    1    2    3    4    5    6    7    8
+Count :  [0]  [1]  [2]  [2]  [1]  [0]  [0]  [0]  [1]
+
+Meaning:
+1 appears 1 time
+2 appears 2 times
+3 appears 2 times
+4 appears 1 time
+8 appears 1 time
+
+Step 2: write back in sorted order
+Take 1  ---> [1]
+Take 2  ---> [1] [2] [2]
+Take 3  ---> [1] [2] [2] [3] [3]
+Take 4  ---> [1] [2] [2] [3] [3] [4]
+Take 8  ---> [1] [2] [2] [3] [3] [4] [8]
+
+Sorted output array:
+       [1]  [2]  [2]  [3]  [3]  [4]  [8]
 ```
 
 ## Example with Explanation
@@ -1018,16 +1254,42 @@ It works well for integers with limited digit length.
 ## Diagram
 
 ```text
-Input: [170, 45, 75, 90, 802, 24, 2, 66]
+Example array: 170, 45, 75, 90, 802, 24, 2, 66
 
-Sort by 1's digit:
-[170, 90, 802, 2, 24, 45, 75, 66]
+Initial array
+[170] [45] [75] [90] [802] [24] [2] [66]
 
-Sort by 10's digit:
-[802, 2, 24, 45, 66, 170, 75, 90]
+Pass 1: sort by 1's digit
+Number : 170   45   75   90   802   24   2   66
+1's dig:  0     5    5    0     2    4    2    6
 
-Sort by 100's digit:
-[2, 24, 45, 66, 75, 90, 170, 802]
+After stable arrangement by 1's digit:
+[170] [90] [802] [2] [24] [45] [75] [66]
+
+Pass 2: sort by 10's digit
+Number : 170   90   802   2   24   45   75   66
+10's dg:  7     9     0   0    2    4    7    6
+
+After stable arrangement by 10's digit:
+[802] [2] [24] [45] [66] [170] [75] [90]
+
+Pass 3: sort by 100's digit
+Number : 802   2   24   45   66   170   75   90
+100's d:  8    0    0    0    0    1    0    0
+
+After stable arrangement by 100's digit:
+[2] [24] [45] [66] [75] [90] [170] [802]
+
+Flow:
+Original array
+    |
+sort by 1's digit
+    v
+sort by 10's digit
+    v
+sort by 100's digit
+    v
+Final sorted array
 ```
 
 ## Example with Explanation
@@ -1151,22 +1413,31 @@ It is useful when input data is uniformly distributed, especially for floating-p
 ## Diagram
 
 ```text
-Input: [0.78, 0.17, 0.39, 0.26, 0.72, 0.94, 0.21, 0.12, 0.23, 0.68]
+Example input:
+[0.78] [0.17] [0.39] [0.26] [0.72] [0.94] [0.21] [0.12] [0.23] [0.68]
 
-Buckets:
-Bucket 0: [0.17, 0.12]
-Bucket 1: [0.21, 0.23, 0.26]
-Bucket 2: [ ]
-Bucket 3: [0.39]
-Bucket 4: [ ]
-Bucket 5: [ ]
-Bucket 6: [0.68]
-Bucket 7: [0.78, 0.72]
-Bucket 8: [ ]
-Bucket 9: [0.94]
+Step 1: place elements into buckets
+Bucket 0 (0.0 to 0.1) : [   ]
+Bucket 1 (0.1 to 0.2) : [0.17] [0.12]
+Bucket 2 (0.2 to 0.3) : [0.26] [0.21] [0.23]
+Bucket 3 (0.3 to 0.4) : [0.39]
+Bucket 4 (0.4 to 0.5) : [   ]
+Bucket 5 (0.5 to 0.6) : [   ]
+Bucket 6 (0.6 to 0.7) : [0.68]
+Bucket 7 (0.7 to 0.8) : [0.78] [0.72]
+Bucket 8 (0.8 to 0.9) : [   ]
+Bucket 9 (0.9 to 1.0) : [0.94]
 
-After sorting each bucket and joining:
-[0.12, 0.17, 0.21, 0.23, 0.26, 0.39, 0.68, 0.72, 0.78, 0.94]
+Step 2: sort inside each bucket
+Bucket 1 : [0.17] [0.12]  ----sort---->  [0.12] [0.17]
+Bucket 2 : [0.26] [0.21] [0.23] ----sort----> [0.21] [0.23] [0.26]
+Bucket 7 : [0.78] [0.72]  ----sort---->  [0.72] [0.78]
+
+Step 3: concatenate buckets
+[0.12] -> [0.17] -> [0.21] -> [0.23] -> [0.26] -> [0.39] -> [0.68] -> [0.72] -> [0.78] -> [0.94]
+
+Sorted array:
+[0.12] [0.17] [0.21] [0.23] [0.26] [0.39] [0.68] [0.72] [0.78] [0.94]
 ```
 
 ## Example with Explanation
