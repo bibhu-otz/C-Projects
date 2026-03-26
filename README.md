@@ -1,50 +1,58 @@
-# Data Structures using C
+
+# Data Structures — Using C
 
 ## Contents
-1. [Introduction to Sorting](#introduction-to-sorting)
-2. [Classification of Sorting Algorithms](#classification-of-sorting-algorithms)
-3. [Bubble Sort](#1-bubble-sort)
-4. [Selection Sort](#2-selection-sort)
-5. [Insertion Sort](#3-insertion-sort)
-6. [Merge Sort](#4-merge-sort)
-7. [Quick Sort](#5-quick-sort)
-8. [Heap Sort](#6-heap-sort)
-9. [Shell Sort](#7-shell-sort)
-10. [Counting Sort](#8-counting-sort)
-11. [Radix Sort](#9-radix-sort)
-12. [Bucket Sort](#10-bucket-sort)
-13. [Comparison Table](#comparison-table)
-14. [Practice Set](#practice-set)
-15. [Conclusion](#conclusion)
+1. [Introduction](#introduction)
+2. [Standard Notation Used in this Note](#standard-notation-used-in-this-note)
+3. [Classification of Sorting](#classification-of-sorting)
+4. [Bubble Sort](#1-bubble-sort)
+5. [Selection Sort](#2-selection-sort)
+6. [Insertion Sort](#3-insertion-sort)
+7. [Merge Sort](#4-merge-sort)
+8. [Quick Sort](#5-quick-sort)
+9. [Heap Sort](#6-heap-sort)
+10. [Shell Sort](#7-shell-sort)
+11. [Counting Sort](#8-counting-sort)
+12. [Radix Sort](#9-radix-sort)
+13. [Bucket Sort](#10-bucket-sort)
+14. [Comparison Table](#comparison-table)
+15. [General Exercises](#general-exercises)
 
 ---
 
-## Introduction to Sorting
+## Introduction
 
-**Sorting** is the process of arranging data in a particular order, usually:
-- **Ascending order**: smallest to largest
-- **Descending order**: largest to smallest
+**Sorting** is the process of arranging records or keys in a specified order, usually ascending or descending.
 
 Sorting is important because it:
-- makes searching faster,
-- helps in data analysis,
-- improves readability of data,
-- is used in databases, operating systems, networking, and many real-world applications.
-
-### Basic Terms
-- **Stable Sort**: keeps equal elements in the same relative order.
-- **In-place Sort**: requires only a small extra memory.
-- **Comparison Sort**: sorts by comparing elements.
-- **Non-comparison Sort**: uses element values directly (for example, digits or counts).
+- improves searching efficiency,
+- simplifies merging and reporting,
+- helps in duplicate detection,
+- is used in databases, operating systems, compilers, and indexing systems.
 
 ---
 
-## Classification of Sorting Algorithms
+## Standard Notation Used in this Note
 
+ The algorithms below use **formal pseudocode notation**:
 
+- Procedure names are written in uppercase, such as `MERGE-SORT`.
+- Assignment is written using `←`.
+- Pseudocode uses **1-based indexing** where convenient.
+- The C programs use normal **0-based indexing**.
+- For exam writing, you may copy either the pseudocode or the C logic.
 
-### 1. Comparison-Based Sorting
-These algorithms compare elements to decide order.
+**Important terms**
+- **Stable sort**: equal elements preserve their relative order.
+- **In-place sort**: requires only a small constant extra memory.
+- **Comparison sort**: order is decided by comparing keys.
+- **Non-comparison sort**: uses counts, digits, or buckets instead of only comparisons.
+
+---
+
+## Classification of Sorting
+
+### 1. Comparison-based sorting
 - Bubble Sort
 - Selection Sort
 - Insertion Sort
@@ -53,8 +61,7 @@ These algorithms compare elements to decide order.
 - Heap Sort
 - Shell Sort
 
-### 2. Non-Comparison-Based Sorting
-These algorithms do not rely only on comparisons.
+### 2. Non-comparison sorting
 - Counting Sort
 - Radix Sort
 - Bucket Sort
@@ -64,152 +71,170 @@ These algorithms do not rely only on comparisons.
 # 1. Bubble Sort
 
 ## Concept
-Bubble Sort repeatedly compares adjacent elements and swaps them if they are in the wrong order.  
-After each pass, the largest unsorted element "bubbles up" to its correct position.
 
-It is simple to understand, but inefficient for large data sets.
+Bubble Sort repeatedly compares adjacent elements and exchanges them if they are out of order.  
+After each pass, the largest element of the unsorted portion moves to its correct final position.
 
-## Algorithm
-1. Start from the first element.
-2. Compare the current element with the next element.
-3. If the current element is greater than the next one, swap them.
-4. Continue this process for the whole array.
-5. Repeat the passes until no swaps are needed.
+- **Method**: exchange sort
+- **Stable**: yes
+- **In-place**: yes
 
-## Diagram
+## Standard Algorithm
 
 ```text
-Example array: 29, 10, 14, 37, 13
-
-Index :   0     1     2     3     4
-Start : [29]  [10]  [14]  [37]  [13]
-
-Pass 1
-Compare a[0] and a[1]
-         [29]  [10]
-           ^----swap----^
-Result: [10]  [29]  [14]  [37]  [13]
-
-Compare a[1] and a[2]
-         [29]  [14]
-           ^----swap----^
-Result: [10]  [14]  [29]  [37]  [13]
-
-Compare a[2] and a[3]
-         [29]  [37]
-         no swap
-Result: [10]  [14]  [29]  [37]  [13]
-
-Compare a[3] and a[4]
-         [37]  [13]
-           ^----swap----^
-Result: [10]  [14]  [29]  [13]  [37]
-                                     ↑
-                           largest fixed after pass 1
-
-Pass 2
-Start : [10]  [14]  [29]  [13]  [37]
-Compare a[0] and a[1] -> no swap
-Compare a[1] and a[2] -> no swap
-Compare a[2] and a[3]
-                     [29]  [13]
-                       ^----swap----^
-Result: [10]  [14]  [13]  [29]  [37]
-                               ↑     ↑
-                    last two positions fixed
-
-Pass 3
-Start : [10]  [14]  [13]  [29]  [37]
-Compare a[0] and a[1] -> no swap
-Compare a[1] and a[2]
-               [14]  [13]
-                 ^----swap----^
-Result: [10]  [13]  [14]  [29]  [37]
-
-Sorted array:
-Index :   0     1     2     3     4
-        [10]  [13]  [14]  [29]  [37]
+BUBBLE-SORT(A, n)
+for i ← 1 to n - 1
+    swapped ← FALSE
+    for j ← 1 to n - i
+        if A[j] > A[j + 1]
+            exchange A[j] and A[j + 1]
+            swapped ← TRUE
+    if swapped = FALSE
+        return
 ```
 
 ## Example with Explanation
-Let the array be:
+
+Let:
 
 ```text
-29, 10, 14, 37, 13
+A = [29, 10, 14, 37, 13]
 ```
 
 ### Pass 1
-- 29 and 10 -> swap -> 10, 29, 14, 37, 13
-- 29 and 14 -> swap -> 10, 14, 29, 37, 13
-- 29 and 37 -> no swap
-- 37 and 13 -> swap -> 10, 14, 29, 13, 37
+- Compare 29 and 10 → swap
+- Compare 29 and 14 → swap
+- Compare 29 and 37 → no swap
+- Compare 37 and 13 → swap
+
+Array after pass 1:
+
+```text
+[10, 14, 29, 13, 37]
+```
 
 ### Pass 2
-- 10 and 14 -> no swap
-- 14 and 29 -> no swap
-- 29 and 13 -> swap -> 10, 14, 13, 29, 37
+- Compare 10 and 14 → no swap
+- Compare 14 and 29 → no swap
+- Compare 29 and 13 → swap
+
+Array after pass 2:
+
+```text
+[10, 14, 13, 29, 37]
+```
 
 ### Pass 3
-- 10 and 14 -> no swap
-- 14 and 13 -> swap -> 10, 13, 14, 29, 37
+- Compare 10 and 14 → no swap
+- Compare 14 and 13 → swap
 
-### Pass 4
-- 10 and 13 -> no swap
+Array after pass 3:
 
-**Sorted array:** `10, 13, 14, 29, 37`
+```text
+[10, 13, 14, 29, 37]
+```
+
+## Exam Diagram (Illustrative Array Diagram)
+
+```text
+Initial array
+Index :   0      1      2      3      4
+        +----+ +----+ +----+ +----+ +----+
+A     = | 29 | | 10 | | 14 | | 37 | | 13 |
+        +----+ +----+ +----+ +----+ +----+
+
+Pass 1: compare A[0] and A[1]
+        +----+   ↔   +----+
+        | 29 |  swap | 10 |
+        +----+       +----+
+
+After swap
+        +----+ +----+ +----+ +----+ +----+
+        | 10 | | 29 | | 14 | | 37 | | 13 |
+        +----+ +----+ +----+ +----+ +----+
+
+Pass 1: compare A[1] and A[2]
+        +----+   ↔   +----+
+        | 29 |  swap | 14 |
+        +----+       +----+
+
+After swap
+        +----+ +----+ +----+ +----+ +----+
+        | 10 | | 14 | | 29 | | 37 | | 13 |
+        +----+ +----+ +----+ +----+ +----+
+
+Pass 1: compare A[3] and A[4]
+        +----+   ↔   +----+
+        | 37 |  swap | 13 |
+        +----+       +----+
+
+After pass 1
+        +----+ +----+ +----+ +----+ +----+
+        | 10 | | 14 | | 29 | | 13 | | 37 |
+        +----+ +----+ +----+ +----+ +----+
+                                      final
+
+Final sorted array
+        +----+ +----+ +----+ +----+ +----+
+        | 10 | | 13 | | 14 | | 29 | | 37 |
+        +----+ +----+ +----+ +----+ +----+
+```
+
+## Diagram
+
+<img width="266" height="866" alt="image" src="https://github.com/user-attachments/assets/41abf322-2971-439b-a1e9-720de147b520" />
+
 
 ## Program Using C
 
 ```c
 #include <stdio.h>
 
-void bubbleSort(int arr[], int n) {
+void bubbleSort(int A[], int n) {
     int i, j, temp, swapped;
     for (i = 0; i < n - 1; i++) {
         swapped = 0;
         for (j = 0; j < n - 1 - i; j++) {
-            if (arr[j] > arr[j + 1]) {
-                temp = arr[j];
-                arr[j] = arr[j + 1];
-                arr[j + 1] = temp;
+            if (A[j] > A[j + 1]) {
+                temp = A[j];
+                A[j] = A[j + 1];
+                A[j + 1] = temp;
                 swapped = 1;
             }
         }
-        if (swapped == 0) {
+        if (!swapped)
             break;
-        }
     }
 }
 
-void printArray(int arr[], int n) {
+void printArray(int A[], int n) {
     int i;
-    for (i = 0; i < n; i++) {
-        printf("%d ", arr[i]);
-    }
+    for (i = 0; i < n; i++)
+        printf("%d ", A[i]);
     printf("\n");
 }
 
 int main() {
-    int arr[] = {29, 10, 14, 37, 13};
-    int n = sizeof(arr) / sizeof(arr[0]);
+    int A[] = {29, 10, 14, 37, 13};
+    int n = sizeof(A) / sizeof(A[0]);
 
-    bubbleSort(arr, n);
-
-    printf("Sorted array: ");
-    printArray(arr, n);
+    bubbleSort(A, n);
+    printArray(A, n);
     return 0;
 }
 ```
 
 ## Time Complexity
-- **Best Case:** `O(n)` (when already sorted and optimized with swapped flag)
-- **Average Case:** `O(n^2)`
-- **Worst Case:** `O(n^2)`
-- **Space Complexity:** `O(1)`
+
+- Best case: `O(n)` with swapped flag
+- Average case: `O(n^2)`
+- Worst case: `O(n^2)`
+- Space complexity: `O(1)`
 
 ## Exercises
-1. Sort `8, 3, 5, 1, 9` using Bubble Sort and show every pass.
-2. Why is Bubble Sort called a **stable** sorting algorithm?
+
+1. Perform Bubble Sort on `8, 3, 5, 1, 9`.
+2. Why is Bubble Sort called stable?
 3. Modify Bubble Sort to sort in descending order.
 
 ---
@@ -217,1400 +242,1631 @@ int main() {
 # 2. Selection Sort
 
 ## Concept
-Selection Sort repeatedly selects the smallest element from the unsorted part of the array and places it at the beginning.
 
-It performs fewer swaps than Bubble Sort, but still takes quadratic time.
+Selection Sort repeatedly selects the smallest element from the unsorted portion and places it at the beginning of that portion.
 
-## Algorithm
-1. Assume the first unsorted element is the minimum.
-2. Search the rest of the array for a smaller element.
-3. If a smaller element is found, update the minimum index.
-4. Swap the minimum element with the first unsorted element.
-5. Repeat for the remaining positions.
+- **Method**: selection sort
+- **Stable**: no (in ordinary form)
+- **In-place**: yes
 
-## Diagram
+## Standard Algorithm
 
 ```text
-Example array: 29, 10, 14, 37, 13
-
-Index :   0     1     2     3     4
-Start : [29]  [10]  [14]  [37]  [13]
-
-Pass 1: find minimum from index 0 to 4
-        [29]  [10]  [14]  [37]  [13]
-          ↑                 ↑      ↑
-      current min         compare compare
-New minimum = 10 at index 1
-
-Swap first unsorted element with minimum
-        [29]  [10]
-          ^----swap----^
-Result: [10]  [29]  [14]  [37]  [13]
-         ---- sorted ----
-
-Pass 2: find minimum from index 1 to 4
-        [10] | [29]  [14]  [37]  [13]
-                ↑                  ↑
-           current min         smallest found
-New minimum = 13 at index 4
-
-Swap a[1] and a[4]
-              [29]                    [13]
-                ^----------------------^
-Result: [10]  [13]  [14]  [37]  [29]
-         -------- sorted --------
-
-Pass 3: find minimum from index 2 to 4
-        [10]  [13] | [14]  [37]  [29]
-                     ↑
-                minimum already correct
-No swap needed
-
-Pass 4: find minimum from index 3 to 4
-        [10]  [13]  [14] | [37]  [29]
-                              ^     ^
-                           compare values
-Swap a[3] and a[4]
-                         [37]  [29]
-                           ^----swap----^
-Result: [10]  [13]  [14]  [29]  [37]
-
-Sorted array:
-        [10]  [13]  [14]  [29]  [37]
+SELECTION-SORT(A, n)
+for i ← 1 to n - 1
+    min ← i
+    for j ← i + 1 to n
+        if A[j] < A[min]
+            min ← j
+    if min ≠ i
+        exchange A[i] and A[min]
 ```
 
 ## Example with Explanation
-Array: `29, 10, 14, 37, 13`
+
+Let:
+
+```text
+A = [29, 10, 14, 37, 13]
+```
 
 ### Pass 1
-- Smallest from index 0 to 4 is `10`
-- Swap `29` and `10`
-- Array becomes: `10, 29, 14, 37, 13`
+Smallest element in positions 1..5 is `10`.  
+Exchange `29` and `10`.
+
+```text
+[10, 29, 14, 37, 13]
+```
 
 ### Pass 2
-- Smallest from index 1 to 4 is `13`
-- Swap `29` and `13`
-- Array becomes: `10, 13, 14, 37, 29`
+Smallest element in positions 2..5 is `13`.  
+Exchange `29` and `13`.
+
+```text
+[10, 13, 14, 37, 29]
+```
 
 ### Pass 3
-- Smallest from index 2 to 4 is `14`
-- No change needed
+Smallest element in positions 3..5 is `14`. No change.
 
 ### Pass 4
-- Smallest from index 3 to 4 is `29`
-- Swap `37` and `29`
-- Array becomes: `10, 13, 14, 29, 37`
+Smallest element in positions 4..5 is `29`.  
+Exchange `37` and `29`.
+
+```text
+[10, 13, 14, 29, 37]
+```
+
+## Exam Diagram
+
+```text
+Initial array
+Index :   0      1      2      3      4
+        +----+ +----+ +----+ +----+ +----+
+A     = | 29 | | 10 | | 14 | | 37 | | 13 |
+        +----+ +----+ +----+ +----+ +----+
+
+Pass 1: find minimum in entire unsorted array
+          min
+           ↓
+        +----+ +----+ +----+ +----+ +----+
+        | 29 | | 10 | | 14 | | 37 | | 13 |
+        +----+ +----+ +----+ +----+ +----+
+                 ↑ smallest
+
+Swap A[0] and A[1]
+        +----+   ↔   +----+
+        | 29 |  swap | 10 |
+        +----+       +----+
+
+After pass 1
+        +----+ | +----+ +----+ +----+ +----+
+        | 10 | | | 29 | | 14 | | 37 | | 13 |
+        +----+ | +----+ +----+ +----+ +----+
+        sorted |       unsorted
+
+After complete sorting
+        +----+ +----+ +----+ +----+ +----+
+        | 10 | | 13 | | 14 | | 29 | | 37 |
+        +----+ +----+ +----+ +----+ +----+
+```
+
+##  Diagram
+
+<img width="342" height="427" alt="image" src="https://github.com/user-attachments/assets/77fcabb5-54ee-4e42-a900-951c2875dbb5" />
+
 
 ## Program Using C
 
 ```c
 #include <stdio.h>
 
-void selectionSort(int arr[], int n) {
-    int i, j, minIndex, temp;
+void selectionSort(int A[], int n) {
+    int i, j, min, temp;
     for (i = 0; i < n - 1; i++) {
-        minIndex = i;
+        min = i;
         for (j = i + 1; j < n; j++) {
-            if (arr[j] < arr[minIndex]) {
-                minIndex = j;
-            }
+            if (A[j] < A[min])
+                min = j;
         }
-        temp = arr[i];
-        arr[i] = arr[minIndex];
-        arr[minIndex] = temp;
+        if (min != i) {
+            temp = A[i];
+            A[i] = A[min];
+            A[min] = temp;
+        }
     }
 }
 
-void printArray(int arr[], int n) {
+void printArray(int A[], int n) {
     int i;
-    for (i = 0; i < n; i++) {
-        printf("%d ", arr[i]);
-    }
+    for (i = 0; i < n; i++)
+        printf("%d ", A[i]);
     printf("\n");
 }
 
 int main() {
-    int arr[] = {29, 10, 14, 37, 13};
-    int n = sizeof(arr) / sizeof(arr[0]);
+    int A[] = {29, 10, 14, 37, 13};
+    int n = sizeof(A) / sizeof(A[0]);
 
-    selectionSort(arr, n);
-
-    printf("Sorted array: ");
-    printArray(arr, n);
+    selectionSort(A, n);
+    printArray(A, n);
     return 0;
 }
 ```
 
 ## Time Complexity
-- **Best Case:** `O(n^2)`
-- **Average Case:** `O(n^2)`
-- **Worst Case:** `O(n^2)`
-- **Space Complexity:** `O(1)`
+
+- Best case: `O(n^2)`
+- Average case: `O(n^2)`
+- Worst case: `O(n^2)`
+- Space complexity: `O(1)`
 
 ## Exercises
+
 1. Apply Selection Sort on `64, 25, 12, 22, 11`.
-2. How many swaps happen in Selection Sort compared to Bubble Sort?
-3. Is Selection Sort stable by default? Explain.
+2. Why does Selection Sort perform fewer swaps than Bubble Sort?
+3. Is Selection Sort stable in its basic form? Explain.
 
 ---
 
 # 3. Insertion Sort
 
 ## Concept
-Insertion Sort builds the sorted array one element at a time.  
-It takes one element from the unsorted portion and inserts it into its correct position in the sorted portion.
 
-It works very well for small or nearly sorted arrays.
+Insertion Sort builds the final sorted array one element at a time by inserting each new key into its proper position in the already sorted left portion.
 
-## Algorithm
-1. Treat the first element as already sorted.
-2. Take the next element and compare it with elements in the sorted part.
-3. Shift larger elements one position to the right.
-4. Insert the current element at the correct position.
-5. Repeat for all elements.
+- **Method**: insertion by shifting
+- **Stable**: yes
+- **In-place**: yes
 
-## Diagram
+## Standard Algorithm
 
 ```text
-Example array: 29, 10, 14, 37, 13
-
-Index :   0     1     2     3     4
-Start : [29]  [10]  [14]  [37]  [13]
-
-Step 1: insert key = 10 into sorted part [29]
-Sorted part   : [29]
-Key           : [10]
-Shift 29 to right
-               [29] ----> position 1
-Array becomes : [29]  [29]  [14]  [37]  [13]
-Insert key 10 at position 0
-Result        : [10]  [29]  [14]  [37]  [13]
-
-Step 2: insert key = 14 into sorted part [10, 29]
-Compare 14 with 29 -> shift 29 right
-                      [29] ----> position 2
-Array becomes : [10]  [29]  [29]  [37]  [13]
-Compare 14 with 10 -> stop
-Insert 14 at position 1
-Result        : [10]  [14]  [29]  [37]  [13]
-
-Step 3: insert key = 37
-Compare with 29 -> no shift needed
-Result        : [10]  [14]  [29]  [37]  [13]
-
-Step 4: insert key = 13
-Compare 13 with 37 -> shift right
-                      [37] ----> position 4
-Compare 13 with 29 -> shift right
-               [29] ----> position 3
-Compare 13 with 14 -> shift right
-        [14] ----> position 2
-Insert 13 after 10
-Result        : [10]  [13]  [14]  [29]  [37]
-
-Sorted array:
-        [10]  [13]  [14]  [29]  [37]
+INSERTION-SORT(A, n)
+for j ← 2 to n
+    key ← A[j]
+    i ← j - 1
+    while i > 0 and A[i] > key
+        A[i + 1] ← A[i]
+        i ← i - 1
+    A[i + 1] ← key
 ```
 
 ## Example with Explanation
-Array: `29, 10, 14, 37, 13`
 
-### Step 1
-- Sorted part: `29`
-- Take `10`
-- Insert before `29`
-- Array: `10, 29, 14, 37, 13`
+Let:
 
-### Step 2
-- Sorted part: `10, 29`
-- Take `14`
-- Insert between `10` and `29`
-- Array: `10, 14, 29, 37, 13`
+```text
+A = [29, 10, 14, 37, 13]
+```
 
-### Step 3
-- Take `37`
-- Already larger than all sorted elements
-- Array: `10, 14, 29, 37, 13`
+### Step 1: Insert 10 into sorted portion [29]
+- Shift 29 one position right.
+- Insert 10.
 
-### Step 4
-- Take `13`
-- Shift `37`, `29`, `14` right
-- Insert `13`
-- Array: `10, 13, 14, 29, 37`
+```text
+[10, 29, 14, 37, 13]
+```
+
+### Step 2: Insert 14 into sorted portion [10, 29]
+- Shift 29 one position right.
+- Insert 14 after 10.
+
+```text
+[10, 14, 29, 37, 13]
+```
+
+### Step 3: Insert 37
+Already greater than 29, so no shift.
+
+### Step 4: Insert 13
+- Shift 37 right
+- Shift 29 right
+- Shift 14 right
+- Insert 13 after 10
+
+```text
+[10, 13, 14, 29, 37]
+```
+
+## Exam Diagram
+
+```text
+Initial array
+        +----+ +----+ +----+ +----+ +----+
+        | 29 | | 10 | | 14 | | 37 | | 13 |
+        +----+ +----+ +----+ +----+ +----+
+
+Insert key = 10 into sorted part [29]
+
+Before shifting
+        +----+ +----+
+        | 29 | | 10 |
+        +----+ +----+
+
+Shift 29 one place right
+               ─────────►
+        +----+ +----+
+        | 29 | | 29 |
+        +----+ +----+
+
+Insert key 10
+        +----+ +----+
+        | 10 | | 29 |
+        +----+ +----+
+
+Insert key = 13 into [10, 14, 29, 37]
+
+        +----+ +----+ +----+ +----+ +----+
+        | 10 | | 14 | | 29 | | 37 | | 13 |
+        +----+ +----+ +----+ +----+ +----+
+
+Shift 37 right      Shift 29 right      Shift 14 right
+             ───►                ───►               ───►
+
+Result
+        +----+ +----+ +----+ +----+ +----+
+        | 10 | | 13 | | 14 | | 29 | | 37 |
+        +----+ +----+ +----+ +----+ +----+
+```
+
+## Diagram
+
+
 
 ## Program Using C
 
 ```c
 #include <stdio.h>
 
-void insertionSort(int arr[], int n) {
-    int i, key, j;
-    for (i = 1; i < n; i++) {
-        key = arr[i];
-        j = i - 1;
-
-        while (j >= 0 && arr[j] > key) {
-            arr[j + 1] = arr[j];
-            j--;
+void insertionSort(int A[], int n) {
+    int j, key, i;
+    for (j = 1; j < n; j++) {
+        key = A[j];
+        i = j - 1;
+        while (i >= 0 && A[i] > key) {
+            A[i + 1] = A[i];
+            i--;
         }
-        arr[j + 1] = key;
+        A[i + 1] = key;
     }
 }
 
-void printArray(int arr[], int n) {
+void printArray(int A[], int n) {
     int i;
-    for (i = 0; i < n; i++) {
-        printf("%d ", arr[i]);
-    }
+    for (i = 0; i < n; i++)
+        printf("%d ", A[i]);
     printf("\n");
 }
 
 int main() {
-    int arr[] = {29, 10, 14, 37, 13};
-    int n = sizeof(arr) / sizeof(arr[0]);
+    int A[] = {29, 10, 14, 37, 13};
+    int n = sizeof(A) / sizeof(A[0]);
 
-    insertionSort(arr, n);
-
-    printf("Sorted array: ");
-    printArray(arr, n);
+    insertionSort(A, n);
+    printArray(A, n);
     return 0;
 }
 ```
 
 ## Time Complexity
-- **Best Case:** `O(n)`
-- **Average Case:** `O(n^2)`
-- **Worst Case:** `O(n^2)`
-- **Space Complexity:** `O(1)`
+
+- Best case: `O(n)`
+- Average case: `O(n^2)`
+- Worst case: `O(n^2)`
+- Space complexity: `O(1)`
 
 ## Exercises
-1. Perform Insertion Sort on `7, 4, 5, 2`.
-2. Why is Insertion Sort efficient for nearly sorted arrays?
-3. Write a version of Insertion Sort that sorts in descending order.
+
+1. Perform Insertion Sort on `5, 2, 4, 6, 1, 3`.
+2. Why is Insertion Sort efficient for small or nearly sorted arrays?
+3. Show all shifts while inserting the key `7` into `[2, 4, 6, 8, 10]`.
 
 ---
 
 # 4. Merge Sort
 
 ## Concept
-Merge Sort follows the **divide and conquer** technique.
-- Divide the array into two halves.
-- Sort each half recursively.
-- Merge the sorted halves.
 
-It is efficient and stable, especially for large data sets.
+Merge Sort follows the **divide-and-conquer** technique.
 
-## Algorithm
-1. If the array has one element, it is already sorted.
-2. Divide the array into two halves.
-3. Recursively sort the left half.
-4. Recursively sort the right half.
-5. Merge both sorted halves into one sorted array.
+1. Divide the array into two halves.
+2. Recursively sort each half.
+3. Merge the sorted halves.
 
-## Diagram
+- **Method**: divide and conquer
+- **Stable**: yes
+- **In-place**: no (standard array implementation uses extra space)
+
+## Standard Algorithm
 
 ```text
-Example array: 29, 10, 14, 37, 13
+MERGE-SORT(A, p, r)
+if p < r
+    q ← ⌊(p + r) / 2⌋
+    MERGE-SORT(A, p, q)
+    MERGE-SORT(A, q + 1, r)
+    MERGE(A, p, q, r)
+```
 
-Divide phase
-Level 0:              [29] [10] [14] [37] [13]
-                         /                 \
-Level 1:      [29] [10] [14]             [37] [13]
-                  /       \                 /    \
-Level 2:       [29]    [10] [14]        [37]   [13]
-                         /   \
-Level 3:              [10]  [14]
+```text
+MERGE(A, p, q, r)
+n1 ← q - p + 1
+n2 ← r - q
+create arrays L[1..n1] and R[1..n2]
 
-Merge phase
-[10] + [14]  ----merge---->  [10] [14]
-[29] + [10] [14]
-   compare 29 and 10 -> take 10
-   compare 29 and 14 -> take 14
-   copy remaining 29
-Result:                  [10] [14] [29]
+for i ← 1 to n1
+    L[i] ← A[p + i - 1]
+for j ← 1 to n2
+    R[j] ← A[q + j]
 
-[37] + [13]
-   compare 37 and 13 -> take 13
-   copy remaining 37
-Result:                  [13] [37]
+i ← 1
+j ← 1
+k ← p
 
-Final merge
-Left  : [10] [14] [29]
-Right : [13] [37]
+while i ≤ n1 and j ≤ n2
+    if L[i] ≤ R[j]
+        A[k] ← L[i]
+        i ← i + 1
+    else
+        A[k] ← R[j]
+        j ← j + 1
+    k ← k + 1
 
-take 10  ---> [10]
-take 13  ---> [10] [13]
-take 14  ---> [10] [13] [14]
-take 29  ---> [10] [13] [14] [29]
-take 37  ---> [10] [13] [14] [29] [37]
+while i ≤ n1
+    A[k] ← L[i]
+    i ← i + 1
+    k ← k + 1
 
-Sorted array:
-              [10] [13] [14] [29] [37]
+while j ≤ n2
+    A[k] ← R[j]
+    j ← j + 1
+    k ← k + 1
 ```
 
 ## Example with Explanation
-Array: `29, 10, 14, 37, 13`
+
+Let:
+
+```text
+A = [38, 27, 43, 3, 9, 82, 10]
+```
 
 ### Divide
-- Left: `29, 10, 14`
-- Right: `37, 13`
+```text
+[38, 27, 43, 3, 9, 82, 10]
+→ [38, 27, 43, 3] and [9, 82, 10]
+→ [38, 27] [43, 3] [9] [82, 10]
+→ [38] [27] [43] [3] [9] [82] [10]
+```
 
-### Sort Left
-- `29`
-- `10, 14` -> already merged as `10, 14`
-- Merge -> `10, 14, 29`
+### Merge
+```text
+[38] + [27] → [27, 38]
+[43] + [3]  → [3, 43]
+[82] + [10] → [10, 82]
 
-### Sort Right
-- `37`
-- `13`
-- Merge -> `13, 37`
+[27, 38] + [3, 43] → [3, 27, 38, 43]
+[9] + [10, 82]     → [9, 10, 82]
 
-### Final Merge
-Merge `10, 14, 29` and `13, 37`
-- 10 comes first
-- then 13
-- then 14
-- then 29
-- then 37
+[3, 27, 38, 43] + [9, 10, 82]
+→ [3, 9, 10, 27, 38, 43, 82]
+```
 
-**Sorted array:** `10, 13, 14, 29, 37`
+## Exam Diagram
+
+```text
+                         [38 27 43 3 9 82 10]
+                         /                  \
+              [38 27 43 3]                [9 82 10]
+               /        \                  /      \
+          [38 27]      [43 3]            [9]    [82 10]
+           /   \        /   \                    /    \
+        [38] [27]    [43] [3]                 [82]  [10]
+
+Merge upward:
+[38] + [27]   -> [27 38]
+[43] + [3]    -> [3 43]
+[82] + [10]   -> [10 82]
+
+[27 38] + [3 43]  -> [3 27 38 43]
+[9] + [10 82]     -> [9 10 82]
+
+Final:
+[3 27 38 43] + [9 10 82] -> [3 9 10 27 38 43 82]
+```
+
+## Diagram
+<img width="391" height="441" alt="image" src="https://github.com/user-attachments/assets/a5a64fe0-af08-4fe9-a367-3d8659a537ca" />
+
 
 ## Program Using C
 
 ```c
 #include <stdio.h>
 
-void merge(int arr[], int left, int mid, int right) {
+void merge(int A[], int low, int mid, int high) {
     int i, j, k;
-    int n1 = mid - left + 1;
-    int n2 = right - mid;
+    int n1 = mid - low + 1;
+    int n2 = high - mid;
 
-    int L[n1], R[n2];
+    int L[100], R[100];
 
     for (i = 0; i < n1; i++)
-        L[i] = arr[left + i];
+        L[i] = A[low + i];
     for (j = 0; j < n2; j++)
-        R[j] = arr[mid + 1 + j];
+        R[j] = A[mid + 1 + j];
 
     i = 0;
     j = 0;
-    k = left;
+    k = low;
 
     while (i < n1 && j < n2) {
-        if (L[i] <= R[j]) {
-            arr[k++] = L[i++];
-        } else {
-            arr[k++] = R[j++];
-        }
+        if (L[i] <= R[j])
+            A[k++] = L[i++];
+        else
+            A[k++] = R[j++];
     }
 
-    while (i < n1) {
-        arr[k++] = L[i++];
-    }
+    while (i < n1)
+        A[k++] = L[i++];
 
-    while (j < n2) {
-        arr[k++] = R[j++];
+    while (j < n2)
+        A[k++] = R[j++];
+}
+
+void mergeSort(int A[], int low, int high) {
+    int mid;
+    if (low < high) {
+        mid = (low + high) / 2;
+        mergeSort(A, low, mid);
+        mergeSort(A, mid + 1, high);
+        merge(A, low, mid, high);
     }
 }
 
-void mergeSort(int arr[], int left, int right) {
-    if (left < right) {
-        int mid = left + (right - left) / 2;
-        mergeSort(arr, left, mid);
-        mergeSort(arr, mid + 1, right);
-        merge(arr, left, mid, right);
-    }
-}
-
-void printArray(int arr[], int n) {
+void printArray(int A[], int n) {
     int i;
-    for (i = 0; i < n; i++) {
-        printf("%d ", arr[i]);
-    }
+    for (i = 0; i < n; i++)
+        printf("%d ", A[i]);
     printf("\n");
 }
 
 int main() {
-    int arr[] = {29, 10, 14, 37, 13};
-    int n = sizeof(arr) / sizeof(arr[0]);
+    int A[] = {38, 27, 43, 3, 9, 82, 10};
+    int n = sizeof(A) / sizeof(A[0]);
 
-    mergeSort(arr, 0, n - 1);
-
-    printf("Sorted array: ");
-    printArray(arr, n);
+    mergeSort(A, 0, n - 1);
+    printArray(A, n);
     return 0;
 }
 ```
 
 ## Time Complexity
-- **Best Case:** `O(n log n)`
-- **Average Case:** `O(n log n)`
-- **Worst Case:** `O(n log n)`
-- **Space Complexity:** `O(n)`
+
+- Best case: `O(n log n)`
+- Average case: `O(n log n)`
+- Worst case: `O(n log n)`
+- Space complexity: `O(n)`
 
 ## Exercises
-1. Draw the recursion tree for Merge Sort on `8, 3, 2, 9, 7, 1, 5, 4`.
-2. Why is Merge Sort called a stable sort?
-3. Compare Merge Sort and Quick Sort in terms of memory usage.
+
+1. Draw the recursion tree for Merge Sort on `8, 4, 2, 6, 1, 3`.
+2. Why is Merge Sort stable?
+3. Why is Merge Sort preferred for linked lists?
 
 ---
 
 # 5. Quick Sort
 
 ## Concept
-Quick Sort also uses the **divide and conquer** method.
-It selects a **pivot** element, places it in the correct position, then arranges smaller elements to the left and larger elements to the right.
 
-It is very fast in practice, but its worst case is quadratic when partitions are poor.
+Quick Sort also follows **divide-and-conquer**.  
+It selects a **pivot**, partitions the array into elements smaller and larger than the pivot, and recursively sorts the partitions.
 
-## Algorithm
-1. Choose a pivot element.
-2. Partition the array so that:
-   - smaller elements go to the left,
-   - larger elements go to the right.
-3. Recursively sort the left part.
-4. Recursively sort the right part.
+- **Method**: partition-exchange sort
+- **Stable**: no
+- **In-place**: yes (ignoring recursion stack)
 
-## Diagram
+## Standard Algorithm
 
 ```text
-Example array: 29, 10, 14, 37, 13
-Use last element as pivot.
+QUICKSORT(A, p, r)
+if p < r
+    q ← PARTITION(A, p, r)
+    QUICKSORT(A, p, q - 1)
+    QUICKSORT(A, q + 1, r)
+```
 
-Step 1: partition with pivot = 13
-Index :   0     1     2     3     4
-Array : [29]  [10]  [14]  [37]  [13]
-Pivot :                               ^
-                                      13
-
-Scan from left:
-29 > 13  -> keep on right side
-10 < 13  -> move to left partition
-14 > 13  -> keep on right side
-37 > 13  -> keep on right side
-
-Swap pivot into correct position
-        [29]                    [13]
-          ^----------------------^
-After partition:
-        [10]  [13]  [14]  [37]  [29]
-         left   ↑     right part
-              pivot fixed
-
-Step 2: sort right part [14, 37, 29]
-Pivot = 29
-
-        [14]  [37]  [29]
-                 ^----swap----^
-After partition:
-        [14]  [29]  [37]
-          left   ↑    right
-               pivot fixed
-
-Step 3: sort left small parts
-[10] is already sorted
-[14] and [37] are single elements
-
-Recursion view
-                    [29, 10, 14, 37, 13]
-                              |
-                          pivot = 13
-                              |
-                 [10]   [13]   [14, 37, 29]
-                                      |
-                                  pivot = 29
-                                      |
-                              [14]   [29]   [37]
-
-Sorted array:
-        [10]  [13]  [14]  [29]  [37]
+```text
+PARTITION(A, p, r)
+x ← A[r]
+i ← p - 1
+for j ← p to r - 1
+    if A[j] ≤ x
+        i ← i + 1
+        exchange A[i] and A[j]
+exchange A[i + 1] and A[r]
+return i + 1
 ```
 
 ## Example with Explanation
-Array: `29, 10, 14, 37, 13`
 
-Choose `13` as pivot.
+Let:
 
-- Elements smaller than 13: `10`
-- Elements greater than 13: `29, 14, 37`
+```text
+A = [10, 80, 30, 90, 40, 50, 70]
+```
 
-Now sort the right part `29, 14, 37`
-- Choose `37` as pivot
-- Left part: `29, 14`
-- Right part: empty
+Take last element `70` as pivot.
 
-Sort `29, 14`
-- Choose `14` as pivot
-- Left: empty
-- Right: `29`
+### Partition
+Elements `≤ 70` move to the left:
+- 10 stays
+- 80 stays
+- 30 moves left side
+- 90 stays
+- 40 moves left side
+- 50 moves left side
 
-Final result: `10, 13, 14, 29, 37`
+After final pivot exchange:
+
+```text
+[10, 30, 40, 50, 70, 90, 80]
+```
+
+Now `70` is at correct position.  
+Recursively sort left and right subarrays.
+
+## Exam Diagram
+
+```text
+Initial array
+        +----+ +----+ +----+ +----+ +----+ +----+ +----+
+        | 10 | | 80 | | 30 | | 90 | | 40 | | 50 | | 70 |
+        +----+ +----+ +----+ +----+ +----+ +----+ +----+
+                                                   pivot
+
+During partition around pivot = 70
+
+30 moves to left of pivot region
+80 and 30 exchange positions
+        +----+   ↔   +----+
+        | 80 |  swap | 30 |
+        +----+       +----+
+
+40 moves left
+90 and 40 exchange positions
+        +----+   ↔   +----+
+        | 90 |  swap | 40 |
+        +----+       +----+
+
+50 moves left
+        +----+   ↔   +----+
+        | 80 |  swap | 50 |
+        +----+       +----+
+
+Final pivot exchange
+        +----+   ↔   +----+
+        | 90 |  swap | 70 |
+        +----+       +----+
+
+After partition
+        +----+ +----+ +----+ +----+ +----+ +----+ +----+
+        | 10 | | 30 | | 40 | | 50 | | 70 | | 90 | | 80 |
+        +----+ +----+ +----+ +----+ +----+ +----+ +----+
+                                left    pivot   right
+```
+
+## Diagram
+
+<img width="322" height="482" alt="image" src="https://github.com/user-attachments/assets/b1460b93-6bad-494e-9e8b-f60bed98e738" />
 
 ## Program Using C
 
 ```c
 #include <stdio.h>
 
-void swap(int *a, int *b) {
-    int temp = *a;
-    *a = *b;
-    *b = temp;
-}
-
-int partition(int arr[], int low, int high) {
-    int pivot = arr[high];
+int partition(int A[], int low, int high) {
+    int pivot = A[high];
     int i = low - 1;
-    int j;
+    int j, temp;
 
     for (j = low; j < high; j++) {
-        if (arr[j] < pivot) {
+        if (A[j] <= pivot) {
             i++;
-            swap(&arr[i], &arr[j]);
+            temp = A[i];
+            A[i] = A[j];
+            A[j] = temp;
         }
     }
 
-    swap(&arr[i + 1], &arr[high]);
+    temp = A[i + 1];
+    A[i + 1] = A[high];
+    A[high] = temp;
+
     return i + 1;
 }
 
-void quickSort(int arr[], int low, int high) {
+void quickSort(int A[], int low, int high) {
+    int p;
     if (low < high) {
-        int pi = partition(arr, low, high);
-
-        quickSort(arr, low, pi - 1);
-        quickSort(arr, pi + 1, high);
+        p = partition(A, low, high);
+        quickSort(A, low, p - 1);
+        quickSort(A, p + 1, high);
     }
 }
 
-void printArray(int arr[], int n) {
+void printArray(int A[], int n) {
     int i;
-    for (i = 0; i < n; i++) {
-        printf("%d ", arr[i]);
-    }
+    for (i = 0; i < n; i++)
+        printf("%d ", A[i]);
     printf("\n");
 }
 
 int main() {
-    int arr[] = {29, 10, 14, 37, 13};
-    int n = sizeof(arr) / sizeof(arr[0]);
+    int A[] = {10, 80, 30, 90, 40, 50, 70};
+    int n = sizeof(A) / sizeof(A[0]);
 
-    quickSort(arr, 0, n - 1);
-
-    printf("Sorted array: ");
-    printArray(arr, n);
+    quickSort(A, 0, n - 1);
+    printArray(A, n);
     return 0;
 }
 ```
 
 ## Time Complexity
-- **Best Case:** `O(n log n)`
-- **Average Case:** `O(n log n)`
-- **Worst Case:** `O(n^2)`
-- **Space Complexity:** `O(log n)` for recursion stack in average case
+
+- Best case: `O(n log n)`
+- Average case: `O(n log n)`
+- Worst case: `O(n^2)` when pivot choice is poor
+- Space complexity: `O(log n)` average recursion stack
 
 ## Exercises
-1. Apply Quick Sort to `50, 23, 9, 18, 61, 32`.
-2. What happens when the pivot is always the smallest or largest element?
-3. How can randomized pivot selection improve Quick Sort?
+
+1. Partition the array `9, 3, 7, 1, 8, 2, 5` using the last element as pivot.
+2. Why is Quick Sort usually fast in practice?
+3. What causes the worst case of Quick Sort?
 
 ---
 
 # 6. Heap Sort
 
 ## Concept
+
 Heap Sort uses a **binary heap** data structure.  
-For ascending order, it builds a **max heap**, where the largest element is at the root. Then it swaps the root with the last element and rebuilds the heap.
+For ascending order, a **max-heap** is built first. Then the root is exchanged with the last element, heap size is reduced, and heap property is restored.
 
-It is efficient and does not need extra array memory like Merge Sort.
+- **Method**: heap-based selection
+- **Stable**: no
+- **In-place**: yes
 
-## Algorithm
-1. Build a max heap from the array.
-2. Swap the root (largest element) with the last element.
-3. Reduce the heap size by one.
-4. Heapify the root again.
-5. Repeat until the heap size becomes 1.
-
-## Diagram
+## Standard Algorithm
 
 ```text
-Example array: 29, 10, 14, 37, 13
+HEAPSORT(A)
+BUILD-MAX-HEAP(A)
+for i ← length(A) downto 2
+    exchange A[1] and A[i]
+    heap-size(A) ← heap-size(A) - 1
+    MAX-HEAPIFY(A, 1)
+```
 
-Step 1: build max heap from array
-Array form : [29] [10] [14] [37] [13]
+```text
+BUILD-MAX-HEAP(A)
+heap-size(A) ← length(A)
+for i ← ⌊length(A) / 2⌋ downto 1
+    MAX-HEAPIFY(A, i)
+```
 
-Tree form:
-                 [37]
-                /    \
-             [29]    [14]
-             /  \
-          [10]  [13]
+```text
+MAX-HEAPIFY(A, i)
+l ← LEFT(i)
+r ← RIGHT(i)
+largest ← i
 
-Corresponding array after heapify:
-Index :   0     1     2     3     4
-Heap  : [37]  [29]  [14]  [10]  [13]
-
-Step 2: move root to end
-        [37]                                      [13]
-          ^----------------------------------------^
-Swap root with last element
-Array : [13]  [29]  [14]  [10] | [37]
-Heap part ----------------------   sorted part
-
-Heapify first 4 elements
-        [13]  [29]
-          ^----swap----^
-Result: [29]  [13]  [14]  [10] | [37]
-
-Step 3: move root to end again
-        [29]                             [10]
-          ^-------------------------------^
-Array : [10]  [13]  [14] | [29]  [37]
-
-Heapify first 3 elements
-        [10]        [14]
-          ^----------^
-Result: [14]  [13]  [10] | [29]  [37]
-
-Continue same process
-[14] swapped to correct place, then [13]
-
-Final sorted array:
-        [10]  [13]  [14]  [29]  [37]
+if l ≤ heap-size(A) and A[l] > A[largest]
+    largest ← l
+if r ≤ heap-size(A) and A[r] > A[largest]
+    largest ← r
+if largest ≠ i
+    exchange A[i] and A[largest]
+    MAX-HEAPIFY(A, largest)
 ```
 
 ## Example with Explanation
-Array: `29, 10, 14, 37, 13`
 
-### Build Max Heap
-A possible max heap arrangement becomes:
+Let:
 
 ```text
-        37
-       /  \
-     29    14
-    /  \
-   10  13
+A = [4, 10, 3, 5, 1]
 ```
 
-### Step 1
-- Swap root `37` with last element `13`
-- Array becomes: `13, 29, 14, 10, 37`
-- Heapify remaining heap
-- New heap root becomes `29`
+### Build max-heap
+Heap becomes:
 
-### Step 2
-- Swap `29` with `10`
-- Heapify remaining heap
-- Continue until sorted
+```text
+[10, 5, 3, 4, 1]
+```
 
-Final array: `10, 13, 14, 29, 37`
+### First extraction
+Exchange root and last element:
+
+```text
+[1, 5, 3, 4, 10]
+```
+
+Restore heap property:
+
+```text
+[5, 4, 3, 1, 10]
+```
+
+Continue until sorted:
+
+```text
+[1, 3, 4, 5, 10]
+```
+
+## Exam Diagram
+
+```text
+Array form:
+        +----+ +----+ +----+ +----+ +----+
+        |  4 | | 10 | |  3 | |  5 | |  1 |
+        +----+ +----+ +----+ +----+ +----+
+
+Corresponding complete binary tree
+
+                4
+              /   \
+            10     3
+           /  \
+          5    1
+
+After building max-heap
+
+               10
+              /   \
+             5     3
+            / \
+           4   1
+
+Array form:
+        +----+ +----+ +----+ +----+ +----+
+        | 10 | |  5 | |  3 | |  4 | |  1 |
+        +----+ +----+ +----+ +----+ +----+
+
+Swap root with last element
+        +----+   ↔   +----+
+        | 10 |  swap |  1 |
+        +----+       +----+
+
+After final sorting
+        +----+ +----+ +----+ +----+ +----+
+        |  1 | |  3 | |  4 | |  5 | | 10 |
+        +----+ +----+ +----+ +----+ +----+
+```
+
+## PlantUML Code for Diagram
+
+```plantuml
+@startuml
+top to bottom direction
+skinparam shadowing false
+
+rectangle "10" as h1
+rectangle "5" as h2
+rectangle "3" as h3
+rectangle "4" as h4
+rectangle "1" as h5
+
+h1 --> h2
+h1 --> h3
+h2 --> h4
+h2 --> h5
+
+note bottom of h1
+Array form:
+[10, 5, 3, 4, 1]
+end note
+@enduml
+```
 
 ## Program Using C
 
 ```c
 #include <stdio.h>
 
-void swap(int *a, int *b) {
-    int temp = *a;
-    *a = *b;
-    *b = temp;
-}
-
-void heapify(int arr[], int n, int i) {
+void heapify(int A[], int n, int i) {
     int largest = i;
     int left = 2 * i + 1;
     int right = 2 * i + 2;
+    int temp;
 
-    if (left < n && arr[left] > arr[largest])
+    if (left < n && A[left] > A[largest])
         largest = left;
-
-    if (right < n && arr[right] > arr[largest])
+    if (right < n && A[right] > A[largest])
         largest = right;
 
     if (largest != i) {
-        swap(&arr[i], &arr[largest]);
-        heapify(arr, n, largest);
+        temp = A[i];
+        A[i] = A[largest];
+        A[largest] = temp;
+        heapify(A, n, largest);
     }
 }
 
-void heapSort(int arr[], int n) {
-    int i;
-
+void heapSort(int A[], int n) {
+    int i, temp;
     for (i = n / 2 - 1; i >= 0; i--)
-        heapify(arr, n, i);
+        heapify(A, n, i);
 
     for (i = n - 1; i > 0; i--) {
-        swap(&arr[0], &arr[i]);
-        heapify(arr, i, 0);
+        temp = A[0];
+        A[0] = A[i];
+        A[i] = temp;
+        heapify(A, i, 0);
     }
 }
 
-void printArray(int arr[], int n) {
+void printArray(int A[], int n) {
     int i;
     for (i = 0; i < n; i++)
-        printf("%d ", arr[i]);
+        printf("%d ", A[i]);
     printf("\n");
 }
 
 int main() {
-    int arr[] = {29, 10, 14, 37, 13};
-    int n = sizeof(arr) / sizeof(arr[0]);
+    int A[] = {4, 10, 3, 5, 1};
+    int n = sizeof(A) / sizeof(A[0]);
 
-    heapSort(arr, n);
-
-    printf("Sorted array: ");
-    printArray(arr, n);
+    heapSort(A, n);
+    printArray(A, n);
     return 0;
 }
 ```
 
 ## Time Complexity
-- **Best Case:** `O(n log n)`
-- **Average Case:** `O(n log n)`
-- **Worst Case:** `O(n log n)`
-- **Space Complexity:** `O(1)`
+
+- Best case: `O(n log n)`
+- Average case: `O(n log n)`
+- Worst case: `O(n log n)`
+- Space complexity: `O(1)`
 
 ## Exercises
-1. Convert `12, 11, 13, 5, 6, 7` into a max heap.
-2. Why is Heap Sort not stable?
-3. Compare Heap Sort with Merge Sort.
+
+1. Build a max-heap for `16, 14, 10, 8, 7, 9, 3, 2, 4, 1`.
+2. Perform one extraction step of Heap Sort on the heap.
+3. Why is Heap Sort not stable?
 
 ---
 
 # 7. Shell Sort
 
 ## Concept
-Shell Sort is an improved version of Insertion Sort.
-Instead of comparing adjacent elements only, it first compares far-apart elements using a **gap**. The gap gradually reduces until it becomes 1.
 
-This reduces the number of shifts needed.
+Shell Sort improves Insertion Sort by allowing exchanges of elements that are far apart.  
+It sorts elements separated by a **gap**, then gradually reduces the gap until it becomes 1.
 
-## Algorithm
-1. Choose an initial gap (commonly `n/2`).
-2. Perform insertion sort on elements that are `gap` distance apart.
-3. Reduce the gap.
-4. Repeat until gap becomes 1.
+- **Method**: diminishing increment sort
+- **Stable**: no
+- **In-place**: yes
 
-## Diagram
+## Standard Algorithm
 
 ```text
-Example array: 29, 10, 14, 37, 13
-n = 5, so first gap = 2
-
-Initial array
-Index :   0     1     2     3     4
-        [29]  [10]  [14]  [37]  [13]
-
-Gap = 2
-Compare elements 2 positions apart.
-
-Group 1: index 0, 2, 4
-         [29]  [14]  [13]
-           |     |     |
-Sort this group by insertion-style shifting
-29 ----> right
-Result group: [13] [14] [29]
-
-Group 2: index 1, 3
-         [10]  [37]
-already in order
-
-Array after gap = 2 pass
-Index :   0     1     2     3     4
-        [13]  [10]  [29]  [37]  [14]
-
-Gap = 1
-Now perform normal insertion sort
-
-Insert 10 before 13
-        [13]  [10]
-          ^----swap/shift----^
-Array : [10]  [13]  [29]  [37]  [14]
-
-Insert 29 -> no change
-Insert 37 -> no change
-Insert 14
-               [37] ----> right
-        [29] ----> right
-Array : [10]  [13]  [14]  [29]  [37]
-
-Sorted array:
-        [10]  [13]  [14]  [29]  [37]
+SHELL-SORT(A, n)
+gap ← ⌊n / 2⌋
+while gap > 0
+    for i ← gap + 1 to n
+        temp ← A[i]
+        j ← i
+        while j > gap and A[j - gap] > temp
+            A[j] ← A[j - gap]
+            j ← j - gap
+        A[j] ← temp
+    gap ← ⌊gap / 2⌋
 ```
 
 ## Example with Explanation
-Array: `29, 10, 14, 37, 13`
+
+Let:
+
+```text
+A = [23, 12, 1, 8, 34, 54, 2, 3]
+```
+
+### Gap = 4
+Compare and sort groups:
+- `(23, 34)`
+- `(12, 54)`
+- `(1, 2)`
+- `(8, 3)`
+
+Array becomes:
+
+```text
+[23, 12, 1, 3, 34, 54, 2, 8]
+```
 
 ### Gap = 2
-Compare and shift elements at distance 2:
-- Group 1: `29, 14, 13`
-- Group 2: `10, 37`
-
-After sorting gap groups, the array becomes more organized.
+Sort elements 2 apart.
 
 ### Gap = 1
-Now perform insertion sort on nearly sorted array.
+Final Insertion Sort gives the completely sorted array:
 
-Final sorted array: `10, 13, 14, 29, 37`
+```text
+[1, 2, 3, 8, 12, 23, 34, 54]
+```
+
+## Exam Diagram
+
+```text
+Initial array
+        +----+ +----+ +----+ +----+ +----+ +----+ +----+ +----+
+        | 23 | | 12 | |  1 | |  8 | | 34 | | 54 | |  2 | |  3 |
+        +----+ +----+ +----+ +----+ +----+ +----+ +----+ +----+
+
+Gap = 4 groups
+Group 1: A[0], A[4] -> 23, 34
+Group 2: A[1], A[5] -> 12, 54
+Group 3: A[2], A[6] ->  1,  2
+Group 4: A[3], A[7] ->  8,  3
+
+Only group 4 changes
+        +----+ +----+ +----+ +----+ +----+ +----+ +----+ +----+
+        | 23 | | 12 | |  1 | |  3 | | 34 | | 54 | |  2 | |  8 |
+        +----+ +----+ +----+ +----+ +----+ +----+ +----+ +----+
+
+Gap = 1
+Final array
+        +----+ +----+ +----+ +----+ +----+ +----+ +----+ +----+
+        |  1 | |  2 | |  3 | |  8 | | 12 | | 23 | | 34 | | 54 |
+        +----+ +----+ +----+ +----+ +----+ +----+ +----+ +----+
+```
+
+## PlantUML Code for Diagram
+
+```plantuml
+@startuml
+left to right direction
+skinparam shadowing false
+skinparam rectangle {
+  RoundCorner 0
+}
+
+rectangle "23" as sh1
+rectangle "12" as sh2
+rectangle "1" as sh3
+rectangle "8" as sh4
+rectangle "34" as sh5
+rectangle "54" as sh6
+rectangle "2" as sh7
+rectangle "3" as sh8
+
+sh1 -[hidden]right-> sh2
+sh2 -[hidden]right-> sh3
+sh3 -[hidden]right-> sh4
+sh4 -[hidden]right-> sh5
+sh5 -[hidden]right-> sh6
+sh6 -[hidden]right-> sh7
+sh7 -[hidden]right-> sh8
+
+sh1 ..> sh5 : gap 4
+sh2 ..> sh6 : gap 4
+sh3 ..> sh7 : gap 4
+sh4 ..> sh8 : gap 4
+@enduml
+```
 
 ## Program Using C
 
 ```c
 #include <stdio.h>
 
-void shellSort(int arr[], int n) {
+void shellSort(int A[], int n) {
     int gap, i, j, temp;
-
     for (gap = n / 2; gap > 0; gap /= 2) {
         for (i = gap; i < n; i++) {
-            temp = arr[i];
-            for (j = i; j >= gap && arr[j - gap] > temp; j -= gap) {
-                arr[j] = arr[j - gap];
-            }
-            arr[j] = temp;
+            temp = A[i];
+            for (j = i; j >= gap && A[j - gap] > temp; j -= gap)
+                A[j] = A[j - gap];
+            A[j] = temp;
         }
     }
 }
 
-void printArray(int arr[], int n) {
+void printArray(int A[], int n) {
     int i;
     for (i = 0; i < n; i++)
-        printf("%d ", arr[i]);
+        printf("%d ", A[i]);
     printf("\n");
 }
 
 int main() {
-    int arr[] = {29, 10, 14, 37, 13};
-    int n = sizeof(arr) / sizeof(arr[0]);
+    int A[] = {23, 12, 1, 8, 34, 54, 2, 3};
+    int n = sizeof(A) / sizeof(A[0]);
 
-    shellSort(arr, n);
-
-    printf("Sorted array: ");
-    printArray(arr, n);
+    shellSort(A, n);
+    printArray(A, n);
     return 0;
 }
 ```
 
 ## Time Complexity
-Time complexity depends on the gap sequence.
 
-- **Best Case:** approximately `O(n log n)` in some gap sequences
-- **Average Case:** around `O(n^1.3)` to `O(n^2)` depending on implementation
-- **Worst Case:** `O(n^2)` (common simple gap sequence)
-- **Space Complexity:** `O(1)`
+Shell Sort complexity depends on the gap sequence.
+
+- Best case: better than `O(n^2)` in practice
+- Average case: depends on gap sequence
+- Worst case: often written as `O(n^2)` for simple gap sequence `n/2, n/4, ...`
+- Space complexity: `O(1)`
 
 ## Exercises
-1. Apply Shell Sort on `23, 12, 1, 8, 34, 54, 2, 3`.
-2. Why is Shell Sort faster than Insertion Sort for medium-sized arrays?
-3. Try a different gap sequence and compare the number of shifts.
+
+1. Perform Shell Sort on `9, 8, 3, 7, 5, 6, 4, 1`.
+2. Why is Shell Sort faster than ordinary Insertion Sort?
+3. What is the role of the gap sequence?
 
 ---
 
 # 8. Counting Sort
 
 ## Concept
-Counting Sort is a non-comparison sorting algorithm.
-It counts how many times each value appears, then uses this count information to place elements in sorted order.
 
-It works only when the range of input values is not too large.
+Counting Sort is used when the keys are integers in a small known range.  
+Instead of comparing elements, it counts the occurrence of each key.
 
-## Algorithm
-1. Find the maximum value in the array.
-2. Create a count array of size `max + 1`.
-3. Count the occurrence of each element.
-4. Convert counts into positions.
-5. Build the output array.
-6. Copy output back to the original array.
+- **Method**: counting frequency
+- **Stable**: yes (when cumulative counts are used correctly)
+- **In-place**: no
 
-## Diagram
+## Standard Algorithm
 
 ```text
-Example array: 4, 2, 2, 8, 3, 3, 1
+COUNTING-SORT(A, B, k)
+let C[0..k] be a new array
 
-Input array
-Index :   0    1    2    3    4    5    6
-       [4]  [2]  [2]  [8]  [3]  [3]  [1]
+for i ← 0 to k
+    C[i] ← 0
 
-Step 1: frequency count
-Value :   0    1    2    3    4    5    6    7    8
-Count :  [0]  [1]  [2]  [2]  [1]  [0]  [0]  [0]  [1]
+for j ← 1 to length(A)
+    C[A[j]] ← C[A[j]] + 1
 
-Meaning:
-1 appears 1 time
-2 appears 2 times
-3 appears 2 times
-4 appears 1 time
-8 appears 1 time
+for i ← 1 to k
+    C[i] ← C[i] + C[i - 1]
 
-Step 2: write back in sorted order
-Take 1  ---> [1]
-Take 2  ---> [1] [2] [2]
-Take 3  ---> [1] [2] [2] [3] [3]
-Take 4  ---> [1] [2] [2] [3] [3] [4]
-Take 8  ---> [1] [2] [2] [3] [3] [4] [8]
-
-Sorted output array:
-       [1]  [2]  [2]  [3]  [3]  [4]  [8]
+for j ← length(A) downto 1
+    B[C[A[j]]] ← A[j]
+    C[A[j]] ← C[A[j]] - 1
 ```
 
 ## Example with Explanation
-Array: `4, 2, 2, 8, 3, 3, 1`
 
-### Count frequency
-- 1 appears 1 time
-- 2 appears 2 times
-- 3 appears 2 times
-- 4 appears 1 time
-- 8 appears 1 time
+Let:
 
-### Rebuild sorted array
-- Write 1 once
-- Write 2 twice
-- Write 3 twice
-- Write 4 once
-- Write 8 once
+```text
+A = [4, 2, 2, 8, 3, 3, 1]
+k = 8
+```
 
-Result: `1, 2, 2, 3, 3, 4, 8`
+### Count frequencies
+```text
+Count array C:
+index : 0 1 2 3 4 5 6 7 8
+count : 0 1 2 2 1 0 0 0 1
+```
+
+### Cumulative count
+```text
+index : 0 1 2 3 4 5 6 7 8
+C     : 0 1 3 5 6 6 6 6 7
+```
+
+### Build output from right to left
+Final sorted output:
+
+```text
+[1, 2, 2, 3, 3, 4, 8]
+```
+
+## Exam Diagram
+
+```text
+Input array
+        +----+ +----+ +----+ +----+ +----+ +----+ +----+
+        |  4 | |  2 | |  2 | |  8 | |  3 | |  3 | |  1 |
+        +----+ +----+ +----+ +----+ +----+ +----+ +----+
+
+Count array C
+Index :   0    1    2    3    4    5    6    7    8
+        +----+ +----+ +----+ +----+ +----+ +----+ +----+ +----+ +----+
+C     = |  0 | |  1 | |  2 | |  2 | |  1 | |  0 | |  0 | |  0 | |  1 |
+        +----+ +----+ +----+ +----+ +----+ +----+ +----+ +----+ +----+
+
+Output array
+        +----+ +----+ +----+ +----+ +----+ +----+ +----+
+B     = |  1 | |  2 | |  2 | |  3 | |  3 | |  4 | |  8 |
+        +----+ +----+ +----+ +----+ +----+ +----+ +----+
+```
+
+## PlantUML Code for Diagram
+
+```plantuml
+@startuml
+left to right direction
+skinparam shadowing false
+skinparam rectangle {
+  RoundCorner 0
+}
+
+package "Input A" {
+  rectangle "4" as c1
+  rectangle "2" as c2
+  rectangle "2" as c3
+  rectangle "8" as c4
+  rectangle "3" as c5
+  rectangle "3" as c6
+  rectangle "1" as c7
+  c1 -[hidden]right-> c2
+  c2 -[hidden]right-> c3
+  c3 -[hidden]right-> c4
+  c4 -[hidden]right-> c5
+  c5 -[hidden]right-> c6
+  c6 -[hidden]right-> c7
+}
+
+package "Count C" {
+  rectangle "0:0" as d0
+  rectangle "1:1" as d1
+  rectangle "2:2" as d2
+  rectangle "3:2" as d3
+  rectangle "4:1" as d4
+  rectangle "5:0" as d5
+  rectangle "6:0" as d6
+  rectangle "7:0" as d7
+  rectangle "8:1" as d8
+  d0 -[hidden]right-> d1
+  d1 -[hidden]right-> d2
+  d2 -[hidden]right-> d3
+  d3 -[hidden]right-> d4
+  d4 -[hidden]right-> d5
+  d5 -[hidden]right-> d6
+  d6 -[hidden]right-> d7
+  d7 -[hidden]right-> d8
+}
+@enduml
+```
 
 ## Program Using C
 
 ```c
 #include <stdio.h>
 
-void countingSort(int arr[], int n) {
-    int i, max = arr[0];
-
-    for (i = 1; i < n; i++) {
-        if (arr[i] > max)
-            max = arr[i];
-    }
-
-    int count[max + 1];
-    for (i = 0; i <= max; i++)
-        count[i] = 0;
+void countingSort(int A[], int n, int k) {
+    int C[100] = {0};
+    int B[100];
+    int i;
 
     for (i = 0; i < n; i++)
-        count[arr[i]]++;
+        C[A[i]]++;
 
-    int index = 0;
-    for (i = 0; i <= max; i++) {
-        while (count[i] > 0) {
-            arr[index++] = i;
-            count[i]--;
-        }
+    for (i = 1; i <= k; i++)
+        C[i] += C[i - 1];
+
+    for (i = n - 1; i >= 0; i--) {
+        B[C[A[i]] - 1] = A[i];
+        C[A[i]]--;
     }
+
+    for (i = 0; i < n; i++)
+        A[i] = B[i];
 }
 
-void printArray(int arr[], int n) {
+void printArray(int A[], int n) {
     int i;
     for (i = 0; i < n; i++)
-        printf("%d ", arr[i]);
+        printf("%d ", A[i]);
     printf("\n");
 }
 
 int main() {
-    int arr[] = {4, 2, 2, 8, 3, 3, 1};
-    int n = sizeof(arr) / sizeof(arr[0]);
-
-    countingSort(arr, n);
-
-    printf("Sorted array: ");
-    printArray(arr, n);
+    int A[] = {4, 2, 2, 8, 3, 3, 1};
+    int n = sizeof(A) / sizeof(A[0]);
+    countingSort(A, n, 8);
+    printArray(A, n);
     return 0;
 }
 ```
 
 ## Time Complexity
-- **Best Case:** `O(n + k)`
-- **Average Case:** `O(n + k)`
-- **Worst Case:** `O(n + k)`
-- **Space Complexity:** `O(k)`
 
-Where `k` is the range of values.
+- Best case: `O(n + k)`
+- Average case: `O(n + k)`
+- Worst case: `O(n + k)`
+- Space complexity: `O(n + k)`
 
 ## Exercises
-1. Apply Counting Sort on `5, 2, 9, 5, 2, 3, 5`.
-2. Why is Counting Sort not suitable when the maximum value is very large?
-3. Modify the algorithm to handle values from `0` to `50`.
+
+1. Perform Counting Sort on `2, 5, 3, 0, 2, 3, 0, 3`.
+2. Why is Counting Sort not suitable when `k` is very large?
+3. Show how stability is preserved in Counting Sort.
 
 ---
 
 # 9. Radix Sort
 
 ## Concept
-Radix Sort sorts numbers digit by digit.
-It usually processes digits from **least significant digit (LSD)** to **most significant digit (MSD)**, using a stable sorting method like Counting Sort for each digit.
 
-It works well for integers with limited digit length.
+Radix Sort sorts numbers digit by digit, starting from the least significant digit (LSD) or most significant digit (MSD).  
+In practice, LSD radix sort often uses a **stable Counting Sort** at each digit position.
 
-## Algorithm
-1. Find the maximum number to know the number of digits.
-2. Sort numbers according to the 1's place.
-3. Sort numbers according to the 10's place.
-4. Sort numbers according to the 100's place.
-5. Continue until all digit positions are processed.
+- **Method**: digit-wise distribution
+- **Stable**: yes (when stable sub-sort is used)
+- **In-place**: no
 
-## Diagram
+## Standard Algorithm (LSD)
 
 ```text
-Example array: 170, 45, 75, 90, 802, 24, 2, 66
+RADIX-SORT(A, d)
+for i ← 1 to d
+    use a stable sort to sort array A on digit i
+```
 
-Initial array
-[170] [45] [75] [90] [802] [24] [2] [66]
+A more practical description for decimal integers:
 
-Pass 1: sort by 1's digit
-Number : 170   45   75   90   802   24   2   66
-1's dig:  0     5    5    0     2    4    2    6
-
-After stable arrangement by 1's digit:
-[170] [90] [802] [2] [24] [45] [75] [66]
-
-Pass 2: sort by 10's digit
-Number : 170   90   802   2   24   45   75   66
-10's dg:  7     9     0   0    2    4    7    6
-
-After stable arrangement by 10's digit:
-[802] [2] [24] [45] [66] [170] [75] [90]
-
-Pass 3: sort by 100's digit
-Number : 802   2   24   45   66   170   75   90
-100's d:  8    0    0    0    0    1    0    0
-
-After stable arrangement by 100's digit:
-[2] [24] [45] [66] [75] [90] [170] [802]
-
-Flow:
-Original array
-    |
-sort by 1's digit
-    v
-sort by 10's digit
-    v
-sort by 100's digit
-    v
-Final sorted array
+```text
+for exp ← 1 while max/exp > 0
+    perform stable counting sort using digit (A[i] / exp) mod 10
+    exp ← exp × 10
 ```
 
 ## Example with Explanation
-Array: `170, 45, 75, 90, 802, 24, 2, 66`
 
-### Pass 1: sort by unit digit
-Look at the last digit of each number:
-- 170 -> 0
-- 45 -> 5
-- 75 -> 5
-- 90 -> 0
-- 802 -> 2
-- 24 -> 4
-- 2 -> 2
-- 66 -> 6
+Let:
 
-After stable sorting by 1's digit:
-`170, 90, 802, 2, 24, 45, 75, 66`
+```text
+A = [170, 45, 75, 90, 802, 24, 2, 66]
+```
 
-### Pass 2: sort by 10's digit
-After sorting by tens place:
-`802, 2, 24, 45, 66, 170, 75, 90`
+### Sort by units digit
+```text
+[170, 90, 802, 2, 24, 45, 75, 66]
+```
 
-### Pass 3: sort by 100's digit
-Final:
-`2, 24, 45, 66, 75, 90, 170, 802`
+### Sort by tens digit
+```text
+[802, 2, 24, 45, 66, 170, 75, 90]
+```
+
+### Sort by hundreds digit
+```text
+[2, 24, 45, 66, 75, 90, 170, 802]
+```
+
+## Exam Diagram
+
+```text
+Input
+        +-----+ +----+ +----+ +----+ +-----+ +----+ +----+ +----+
+        | 170 | | 45 | | 75 | | 90 | | 802 | | 24 | |  2 | | 66 |
+        +-----+ +----+ +----+ +----+ +-----+ +----+ +----+ +----+
+
+Pass 1: units digit
+        170  90  802  2  24  45  75  66
+
+Pass 2: tens digit
+        802  2  24  45  66  170  75  90
+
+Pass 3: hundreds digit
+        2  24  45  66  75  90  170  802
+```
+
+## PlantUML Code for Diagram
+
+```plantuml
+@startuml
+top to bottom direction
+skinparam shadowing false
+
+rectangle "170 45 75 90 802 24 2 66" as r0
+rectangle "After units:\n170 90 802 2 24 45 75 66" as r1
+rectangle "After tens:\n802 2 24 45 66 170 75 90" as r2
+rectangle "After hundreds:\n2 24 45 66 75 90 170 802" as r3
+
+r0 --> r1 : units digit
+r1 --> r2 : tens digit
+r2 --> r3 : hundreds digit
+@enduml
+```
 
 ## Program Using C
 
 ```c
 #include <stdio.h>
 
-int getMax(int arr[], int n) {
-    int max = arr[0];
-    int i;
-    for (i = 1; i < n; i++) {
-        if (arr[i] > max)
-            max = arr[i];
-    }
+int getMax(int A[], int n) {
+    int i, max = A[0];
+    for (i = 1; i < n; i++)
+        if (A[i] > max)
+            max = A[i];
     return max;
 }
 
-void countingSortByDigit(int arr[], int n, int exp) {
-    int output[n];
+void countingSortByDigit(int A[], int n, int exp) {
+    int output[100];
     int count[10] = {0};
     int i;
 
     for (i = 0; i < n; i++)
-        count[(arr[i] / exp) % 10]++;
+        count[(A[i] / exp) % 10]++;
 
     for (i = 1; i < 10; i++)
         count[i] += count[i - 1];
 
     for (i = n - 1; i >= 0; i--) {
-        int digit = (arr[i] / exp) % 10;
-        output[count[digit] - 1] = arr[i];
-        count[digit]--;
+        output[count[(A[i] / exp) % 10] - 1] = A[i];
+        count[(A[i] / exp) % 10]--;
     }
 
     for (i = 0; i < n; i++)
-        arr[i] = output[i];
+        A[i] = output[i];
 }
 
-void radixSort(int arr[], int n) {
+void radixSort(int A[], int n) {
     int exp;
-    int max = getMax(arr, n);
+    int max = getMax(A, n);
 
     for (exp = 1; max / exp > 0; exp *= 10)
-        countingSortByDigit(arr, n, exp);
+        countingSortByDigit(A, n, exp);
 }
 
-void printArray(int arr[], int n) {
+void printArray(int A[], int n) {
     int i;
     for (i = 0; i < n; i++)
-        printf("%d ", arr[i]);
+        printf("%d ", A[i]);
     printf("\n");
 }
 
 int main() {
-    int arr[] = {170, 45, 75, 90, 802, 24, 2, 66};
-    int n = sizeof(arr) / sizeof(arr[0]);
+    int A[] = {170, 45, 75, 90, 802, 24, 2, 66};
+    int n = sizeof(A) / sizeof(A[0]);
 
-    radixSort(arr, n);
-
-    printf("Sorted array: ");
-    printArray(arr, n);
+    radixSort(A, n);
+    printArray(A, n);
     return 0;
 }
 ```
 
 ## Time Complexity
-- **Best Case:** `O(d(n + b))`
-- **Average Case:** `O(d(n + b))`
-- **Worst Case:** `O(d(n + b))`
-- **Space Complexity:** `O(n + b)`
+
+- Best case: `O(d(n + b))`
+- Average case: `O(d(n + b))`
+- Worst case: `O(d(n + b))`
+- Space complexity: `O(n + b)`
 
 Where:
-- `d` = number of digits
-- `b` = base (usually 10)
+- `d` = number of digits,
+- `b` = base (for decimal, `b = 10`).
 
 ## Exercises
-1. Perform Radix Sort on `121, 432, 564, 23, 1, 45, 788`.
-2. Why must the internal sort used in Radix Sort be stable?
-3. Compare Radix Sort and Counting Sort.
+
+1. Perform LSD Radix Sort on `329, 457, 657, 839, 436, 720, 355`.
+2. Why must the intermediate sort be stable?
+3. Compare Counting Sort and Radix Sort.
 
 ---
 
 # 10. Bucket Sort
 
 ## Concept
-Bucket Sort distributes elements into several buckets, sorts each bucket separately, and then combines the buckets.
 
-It is useful when input data is uniformly distributed, especially for floating-point numbers in the range `0` to `1`.
+Bucket Sort distributes elements into several buckets, sorts each bucket individually, and then concatenates the buckets.
 
-## Algorithm
-1. Create empty buckets.
-2. Put each element into its appropriate bucket.
-3. Sort each bucket individually.
-4. Concatenate all buckets to form the sorted result.
+It is useful when input values are uniformly distributed over a range.
 
-## Diagram
+- **Method**: distribution sort
+- **Stable**: depends on bucket sorting method
+- **In-place**: no
+
+## Standard Algorithm
 
 ```text
-Example input:
-[0.78] [0.17] [0.39] [0.26] [0.72] [0.94] [0.21] [0.12] [0.23] [0.68]
+BUCKET-SORT(A)
+n ← length(A)
+create n empty buckets B[0], B[1], ..., B[n - 1]
 
-Step 1: place elements into buckets
-Bucket 0 (0.0 to 0.1) : [   ]
-Bucket 1 (0.1 to 0.2) : [0.17] [0.12]
-Bucket 2 (0.2 to 0.3) : [0.26] [0.21] [0.23]
-Bucket 3 (0.3 to 0.4) : [0.39]
-Bucket 4 (0.4 to 0.5) : [   ]
-Bucket 5 (0.5 to 0.6) : [   ]
-Bucket 6 (0.6 to 0.7) : [0.68]
-Bucket 7 (0.7 to 0.8) : [0.78] [0.72]
-Bucket 8 (0.8 to 0.9) : [   ]
-Bucket 9 (0.9 to 1.0) : [0.94]
+for i ← 1 to n
+    insert A[i] into bucket B[⌊n × A[i]⌋]
 
-Step 2: sort inside each bucket
-Bucket 1 : [0.17] [0.12]  ----sort---->  [0.12] [0.17]
-Bucket 2 : [0.26] [0.21] [0.23] ----sort----> [0.21] [0.23] [0.26]
-Bucket 7 : [0.78] [0.72]  ----sort---->  [0.72] [0.78]
+for i ← 0 to n - 1
+    sort bucket B[i] using insertion sort
 
-Step 3: concatenate buckets
-[0.12] -> [0.17] -> [0.21] -> [0.23] -> [0.26] -> [0.39] -> [0.68] -> [0.72] -> [0.78] -> [0.94]
-
-Sorted array:
-[0.12] [0.17] [0.21] [0.23] [0.26] [0.39] [0.68] [0.72] [0.78] [0.94]
+concatenate B[0], B[1], ..., B[n - 1]
 ```
 
+**Note:** This standard form assumes input values are in the interval `[0, 1)`.
+
 ## Example with Explanation
-Input:
-`0.78, 0.17, 0.39, 0.26, 0.72, 0.94, 0.21, 0.12, 0.23, 0.68`
 
-### Bucket placement
-- Values near `0.1` go into bucket 1
-- Values near `0.2` go into bucket 2
-- Values near `0.7` go into bucket 7
-- and so on
+Let:
 
-### Sort each bucket
-- Bucket with `0.17, 0.12` becomes `0.12, 0.17`
-- Bucket with `0.21, 0.23, 0.26` remains sorted after small insertion sort
-- Bucket with `0.78, 0.72` becomes `0.72, 0.78`
+```text
+A = [0.78, 0.17, 0.39, 0.26, 0.72, 0.94, 0.21, 0.12, 0.23, 0.68]
+```
 
-### Concatenate
-Final result:
-`0.12, 0.17, 0.21, 0.23, 0.26, 0.39, 0.68, 0.72, 0.78, 0.94`
+Using 10 buckets:
+
+- Bucket 1 → `0.12, 0.17`
+- Bucket 2 → `0.21, 0.23, 0.26`
+- Bucket 3 → `0.39`
+- Bucket 6 → `0.68`
+- Bucket 7 → `0.72, 0.78`
+- Bucket 9 → `0.94`
+
+After sorting each bucket and concatenating:
+
+```text
+[0.12, 0.17, 0.21, 0.23, 0.26, 0.39, 0.68, 0.72, 0.78, 0.94]
+```
+
+## Exam Diagram
+
+```text
+Input
+[0.78, 0.17, 0.39, 0.26, 0.72, 0.94, 0.21, 0.12, 0.23, 0.68]
+
+Buckets
+B0 : 
+B1 : 0.17, 0.12
+B2 : 0.26, 0.21, 0.23
+B3 : 0.39
+B4 :
+B5 :
+B6 : 0.68
+B7 : 0.78, 0.72
+B8 :
+B9 : 0.94
+
+After sorting each bucket
+B1 : 0.12, 0.17
+B2 : 0.21, 0.23, 0.26
+B3 : 0.39
+B6 : 0.68
+B7 : 0.72, 0.78
+B9 : 0.94
+
+Final output
+[0.12, 0.17, 0.21, 0.23, 0.26, 0.39, 0.68, 0.72, 0.78, 0.94]
+```
+
+## PlantUML Code for Diagram
+
+```plantuml
+@startuml
+top to bottom direction
+skinparam shadowing false
+
+rectangle "Input:\n0.78 0.17 0.39 0.26 0.72 0.94 0.21 0.12 0.23 0.68" as b0
+rectangle "B1:\n0.12 0.17" as b1
+rectangle "B2:\n0.21 0.23 0.26" as b2
+rectangle "B3:\n0.39" as b3
+rectangle "B6:\n0.68" as b6
+rectangle "B7:\n0.72 0.78" as b7
+rectangle "B9:\n0.94" as b9
+rectangle "Output:\n0.12 0.17 0.21 0.23 0.26 0.39 0.68 0.72 0.78 0.94" as bout
+
+b0 --> b1
+b0 --> b2
+b0 --> b3
+b0 --> b6
+b0 --> b7
+b0 --> b9
+
+b1 --> bout
+b2 --> bout
+b3 --> bout
+b6 --> bout
+b7 --> bout
+b9 --> bout
+@enduml
+```
 
 ## Program Using C
 
 ```c
 #include <stdio.h>
 
-void insertionSortFloat(float arr[], int n) {
+void insertionSortFloat(float A[], int n) {
     int i, j;
     float key;
     for (i = 1; i < n; i++) {
-        key = arr[i];
+        key = A[i];
         j = i - 1;
-        while (j >= 0 && arr[j] > key) {
-            arr[j + 1] = arr[j];
+        while (j >= 0 && A[j] > key) {
+            A[j + 1] = A[j];
             j--;
         }
-        arr[j + 1] = key;
+        A[j + 1] = key;
     }
 }
 
-void bucketSort(float arr[], int n) {
+void bucketSort(float A[], int n) {
     int i, j, k;
-
-    float buckets[n][n];
-    int bucketCount[n];
-
-    for (i = 0; i < n; i++)
-        bucketCount[i] = 0;
+    float bucket[10][10];
+    int count[10] = {0};
 
     for (i = 0; i < n; i++) {
-        int index = (int)(arr[i] * n);
-        if (index >= n)
-            index = n - 1;
-        buckets[index][bucketCount[index]++] = arr[i];
+        int index = (int)(A[i] * 10);
+        bucket[index][count[index]++] = A[i];
     }
 
-    for (i = 0; i < n; i++) {
-        insertionSortFloat(buckets[i], bucketCount[i]);
-    }
+    for (i = 0; i < 10; i++)
+        insertionSortFloat(bucket[i], count[i]);
 
     k = 0;
-    for (i = 0; i < n; i++) {
-        for (j = 0; j < bucketCount[i]; j++) {
-            arr[k++] = buckets[i][j];
-        }
-    }
+    for (i = 0; i < 10; i++)
+        for (j = 0; j < count[i]; j++)
+            A[k++] = bucket[i][j];
 }
 
-void printArray(float arr[], int n) {
+void printArray(float A[], int n) {
     int i;
     for (i = 0; i < n; i++)
-        printf("%.2f ", arr[i]);
+        printf("%.2f ", A[i]);
     printf("\n");
 }
 
 int main() {
-    float arr[] = {0.78, 0.17, 0.39, 0.26, 0.72, 0.94, 0.21, 0.12, 0.23, 0.68};
-    int n = sizeof(arr) / sizeof(arr[0]);
+    float A[] = {0.78, 0.17, 0.39, 0.26, 0.72, 0.94, 0.21, 0.12, 0.23, 0.68};
+    int n = sizeof(A) / sizeof(A[0]);
 
-    bucketSort(arr, n);
-
-    printf("Sorted array: ");
-    printArray(arr, n);
+    bucketSort(A, n);
+    printArray(A, n);
     return 0;
 }
 ```
 
 ## Time Complexity
-- **Best Case:** `O(n + k)`
-- **Average Case:** `O(n + k)`
-- **Worst Case:** `O(n^2)` (if many elements fall into the same bucket)
-- **Space Complexity:** `O(n + k)`
+
+- Best case: `O(n + k)`
+- Average case: `O(n + k)` for uniform distribution
+- Worst case: `O(n^2)` if all values fall into one bucket
+- Space complexity: depends on bucket representation, typically `O(n + k)`
 
 ## Exercises
-1. Apply Bucket Sort on `0.42, 0.32, 0.23, 0.52, 0.25, 0.47, 0.51`.
-2. Why is Bucket Sort good for uniformly distributed data?
-3. What happens when almost all elements fall into one bucket?
+
+1. Apply Bucket Sort on floating-point values in `[0, 1)`.
+2. Why does Bucket Sort work well for uniformly distributed data?
+3. What happens if all elements fall into the same bucket?
 
 ---
 
-# Comparison Table
+## Comparison Table
 
-| Sorting Algorithm | Type | Stable | In-Place | Best Case | Average Case | Worst Case |
-|---|---|---:|---:|---:|---:|---:|
-| Bubble Sort | Comparison | Yes | Yes | O(n) | O(n^2) | O(n^2) |
-| Selection Sort | Comparison | No | Yes | O(n^2) | O(n^2) | O(n^2) |
-| Insertion Sort | Comparison | Yes | Yes | O(n) | O(n^2) | O(n^2) |
-| Merge Sort | Comparison | Yes | No | O(n log n) | O(n log n) | O(n log n) |
-| Quick Sort | Comparison | No | Mostly Yes | O(n log n) | O(n log n) | O(n^2) |
-| Heap Sort | Comparison | No | Yes | O(n log n) | O(n log n) | O(n log n) |
-| Shell Sort | Comparison | No | Yes | Depends | Depends | O(n^2) |
-| Counting Sort | Non-comparison | Yes | No | O(n + k) | O(n + k) | O(n + k) |
-| Radix Sort | Non-comparison | Yes | No | O(d(n + b)) | O(d(n + b)) | O(d(n + b)) |
-| Bucket Sort | Non-comparison | Depends | No | O(n + k) | O(n + k) | O(n^2) |
-
----
-
-# Practice Set
-
-## Very Short Questions
-1. Define sorting.
-2. What is a stable sorting algorithm?
-3. What is an in-place sorting algorithm?
-4. Name two non-comparison sorting algorithms.
-5. Which sorting algorithm uses divide and conquer?
-
-## Short Answer Questions
-1. Differentiate between Bubble Sort and Selection Sort.
-2. Explain why Insertion Sort is useful for nearly sorted arrays.
-3. Write the steps of Merge Sort.
-4. What is a pivot in Quick Sort?
-5. Why is Counting Sort not used for very large ranges?
-
-## Long Answer Questions
-1. Explain Bubble Sort with algorithm, example, complexity, and C program.
-2. Compare Merge Sort, Quick Sort, and Heap Sort.
-3. Explain Radix Sort with a digit-by-digit example.
-4. Explain Bucket Sort using floating-point values.
-5. Compare all sorting algorithms on the basis of stability, in-place nature, and time complexity.
-
-## Lab Exercises
-1. Write a menu-driven C program to perform:
-   - Bubble Sort
-   - Selection Sort
-   - Insertion Sort
-   - Merge Sort
-   - Quick Sort
-2. Count the number of comparisons and swaps for Bubble Sort.
-3. Modify Quick Sort to sort in descending order.
-4. Implement Counting Sort for integers from `0` to `100`.
-5. Test all algorithms on:
-   - sorted data,
-   - reverse sorted data,
-   - random data,
-   and compare execution time.
+| Algorithm      | Stable | In-place | Best Case | Average Case | Worst Case | Main Idea |
+|---|---:|---:|---:|---:|---:|---|
+| Bubble Sort   | Yes | Yes | O(n) | O(n^2) | O(n^2) | Adjacent exchanges |
+| Selection Sort| No  | Yes | O(n^2) | O(n^2) | O(n^2) | Repeated selection of minimum |
+| Insertion Sort| Yes | Yes | O(n) | O(n^2) | O(n^2) | Insert key into sorted prefix |
+| Merge Sort    | Yes | No  | O(n log n) | O(n log n) | O(n log n) | Divide and merge |
+| Quick Sort    | No  | Yes | O(n log n) | O(n log n) | O(n^2) | Partition around pivot |
+| Heap Sort     | No  | Yes | O(n log n) | O(n log n) | O(n log n) | Repeated heap extraction |
+| Shell Sort    | No  | Yes | depends | depends | often O(n^2) | Gapped insertion |
+| Counting Sort | Yes | No  | O(n + k) | O(n + k) | O(n + k) | Counting key frequencies |
+| Radix Sort    | Yes | No  | O(d(n + b)) | O(d(n + b)) | O(d(n + b)) | Digit-wise stable sorting |
+| Bucket Sort   | Depends | No | O(n + k) | O(n + k) | O(n^2) | Distribution into buckets |
 
 ---
 
-# Conclusion
+## General Exercises
 
-Sorting is a fundamental topic in data structures and algorithms.
+1. Distinguish between stable and unstable sorting algorithms with examples.
+2. Distinguish between internal sorting and external sorting.
+3. Which sorting methods are based on divide-and-conquer?
+4. Why are Counting Sort and Radix Sort called non-comparison sorts?
+5. Which sorting method is best for:
+   - nearly sorted data?
+   - large random data?
+   - keys in a small integer range?
+6. Write short notes on:
+   - pivot selection,
+   - heap property,
+   - cumulative count,
+   - bucket distribution.
+7. Draw array diagrams for Bubble Sort, Insertion Sort, and Quick Sort.
 
-- Use **Bubble, Selection, Insertion** for learning basic logic.
-- Use **Merge, Quick, Heap** for efficient sorting of large arrays.
-- Use **Counting, Radix, Bucket** when data properties make them suitable.
+---
 
-For exams and interviews, remember:
-- **Concept**
-- **Algorithm steps**
-- **Example**
-- **Diagram**
-- **C program**
-- **Time complexity**
-- **Stability**
-- **Space usage**
+## Final Exam Writing Tip
 
-These notes can be used directly for study, revision, assignment work, and viva preparation.
+For theory answers in exams, write each sorting method in this order:
+
+1. **Definition / concept**
+2. **Algorithm or pseudocode**
+3. **Stepwise example**
+4. **Diagram**
+5. **Time and space complexity**
+6. **Properties** such as stability and in-place behavior
+
+This order gives a clean, standard textbook-style answer.
